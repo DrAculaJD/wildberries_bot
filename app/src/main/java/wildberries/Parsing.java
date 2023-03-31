@@ -30,7 +30,7 @@ public class Parsing {
 
         StringBuilder result = new StringBuilder();
 
-        for(Map.Entry str: resultMap.entrySet()) {
+        for (Map.Entry str: resultMap.entrySet()) {
             result.append(str.toString()).append("\n");
         }
 
