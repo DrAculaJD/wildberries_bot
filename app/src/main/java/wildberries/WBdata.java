@@ -11,7 +11,7 @@ public class WBdata {
 
     private static final LocalDate CURRENT_DATE = LocalDate.now();
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    public static final String FORMATTED_DATE = CURRENT_DATE.format(FORMATTER);
+    private static final String FORMATTED_DATE = CURRENT_DATE.format(FORMATTER);
 
     public static String getOrdersForTheDay(String apiKey) {
         String url = "https://statistics-api.wildberries.ru/api/v1/supplier/orders?dateFrom=" + FORMATTED_DATE;
