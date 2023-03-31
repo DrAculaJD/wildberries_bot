@@ -3,3 +3,6 @@ run-dist:
 
 lint:
 	@./gradlew checkstyleMain checkstyleTest
+
+build:
+	@./gradlew clean build
