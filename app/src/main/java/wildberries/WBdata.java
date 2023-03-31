@@ -9,11 +9,11 @@ import java.time.format.DateTimeFormatter;
 
 public class WBdata {
 
-    private final static LocalDate CURRENT_DATE = LocalDate.now();
-    private final static DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    public final static String FORMATTED_DATE = CURRENT_DATE.format(FORMATTER);
+    private static final LocalDate CURRENT_DATE = LocalDate.now();
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    public static final String FORMATTED_DATE = CURRENT_DATE.format(FORMATTER);
 
-    public static String getOrdersForTheDay(String apiKey){
+    public static String getOrdersForTheDay(String apiKey) {
         String url = "https://statistics-api.wildberries.ru/api/v1/supplier/orders?dateFrom=" + FORMATTED_DATE;
 
         String result = "";
