@@ -16,7 +16,7 @@ public class WBdata {
     public static String getOrdersForTheDay(String apiKey) {
         String url = "https://statistics-api.wildberries.ru/api/v1/supplier/orders?dateFrom=" + FORMATTED_DATE;
 
-        String result = "";
+        String result;
 
         try {
             OkHttpClient client = new OkHttpClient().newBuilder()
@@ -30,7 +30,8 @@ public class WBdata {
 
             result = response.body().string();
         } catch (Exception e) {
-            System.out.println("Что-то пошло не так...");
+            return "К сожалению, этот ключ не работает, проверьте, правильно ли скопирован ключ "
+                    + "и попробуйте еще раз \uD83D\uDE80";
         }
 
         //System.out.println(result);

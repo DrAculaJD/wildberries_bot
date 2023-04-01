@@ -2,14 +2,26 @@ package Telegram;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+
 import wildberries.Parsing;
 import wildberries.Shop;
 import wildberries.WBdata;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyBot extends TelegramLongPollingBot {
+
+    private boolean firstStart = true;
+    private boolean statisticsApiMessage = true;
+    private final Shop shop = new Shop();
+
+    private String chatId;
+
     @Override
     public String getBotUsername() {
         return "polezhaevTestBot";
@@ -22,24 +34,120 @@ public class MyBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        String inputMessage = update.getMessage().getText();
 
-        Shop shop = new Shop();
-        shop.setStatisticsApi("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NJRCI6I"
-                + "jQ0YTNiZGY2LThkMzItNDg0Zi1iODA0LTQxNzY2M2IwYWFmZSJ9.5WG20bkJyl7D80DsqICp8n29b5GgD-IR7wXJN18kvzk");
+        if (update.getMessage() != null) {
+            String inputMessage = update.getMessage().getText();
 
-        final String ordersData = WBdata.getOrdersForTheDay(shop.getStatisticsApi());
-
-        if (update.getMessage() != null && inputMessage.equals("/start")) {
-            SendMessage otputMessage = new SendMessage();
-            otputMessage.setChatId(update.getMessage().getChatId().toString());
-            otputMessage.setText(Parsing.dataToString(ordersData));
-
-            try {
-                execute(otputMessage);
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
+            if (inputMessage.equals("/start") && firstStart) {
+                startAction(update);
+            } else if (statisticsApiMessage && inputMessage.length() == 149) {
+                statisticsApi(update);
             }
+        } else if (update.getCallbackQuery().getData().equals("Заказы сегодня")) {
+            getTodayOrders();
+        }
+
+        if (!statisticsApiMessage) {
+            getButtons(update);
+        }
+
+    }
+
+    private void startAction(Update update) {
+        firstStart = false;
+        chatId = update.getMessage().getChatId().toString();
+
+        SendMessage otputMessageFirst = new SendMessage();
+        otputMessageFirst.setChatId(chatId);
+        otputMessageFirst.setText("❗ Сообщаем вам, что все данные, которые передаются в этом боте, не защищены, " +
+                "так как это открытый проект. \nМы не несем ответственность за сохранность этих данных. ❗");
+
+        SendMessage otputMessageNext = new SendMessage();
+        otputMessageNext.setChatId(update.getMessage().getChatId().toString());
+        otputMessageNext.setText("Введите ваш ключ API \"Статистика\"");
+
+        try {
+            execute(otputMessageFirst);
+            execute(otputMessageNext);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void statisticsApi(Update update) {
+        String inputMessage = update.getMessage().getText().trim();
+        shop.setStatisticsApi(inputMessage);
+        final String ordersToday = WBdata.getOrdersForTheDay(shop.getStatisticsApi());
+
+        SendMessage otputMessage = new SendMessage();
+        otputMessage.setChatId(update.getMessage().getChatId().toString());
+
+        try {
+            Parsing.dataToString(ordersToday);
+
+            statisticsApiMessage = false;
+            otputMessage.setText("Отлично, можем приступать к работе!");
+        } catch (Exception e) {
+            otputMessage.setText("К сожалению, этот ключ не работает, проверьте, правильно ли скопирован ключ "
+                    + "и попробуйте еще раз \uD83D\uDE80");
+        }
+
+        try {
+            otputMessage.setReplyMarkup(setButtons());
+            execute(otputMessage);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private InlineKeyboardMarkup setButtons() {
+
+        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+        InlineKeyboardButton ordersToday = new InlineKeyboardButton();
+        ordersToday.setText("Заказы сегодня");
+        ordersToday.setCallbackData("Заказы сегодня");
+
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+        rowInline.add(ordersToday);
+
+        rowsInline.add(rowInline);
+        markupInline.setKeyboard(rowsInline);
+
+        return markupInline;
+    }
+
+    private void getButtons (Update update) {
+        String inputData = update.getCallbackQuery().getData();
+
+        SendMessage otputMessage = new SendMessage();
+
+        if (inputData.equals("Заказы сегодня")) {
+            otputMessage.setText("Выберите действие");
+        }
+
+        otputMessage.setReplyMarkup(setButtons());
+        otputMessage.setChatId(chatId);
+
+        try {
+            execute(otputMessage);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getTodayOrders() {
+        final String ordersToday = WBdata.getOrdersForTheDay(shop.getStatisticsApi());
+
+        SendMessage otputMessage = new SendMessage();
+        otputMessage.setChatId(chatId);
+        otputMessage.setText(Parsing.dataToString(ordersToday));
+
+        try {
+            execute(otputMessage);
+            //getButtons(update);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
         }
     }
 }

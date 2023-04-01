@@ -3,6 +3,9 @@ package wildberries.types;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class Orders {
     @JsonIgnore
     private String date;
@@ -122,7 +125,11 @@ public class Orders {
     @Override
     public String toString() {
         String cancel = "нет";
-        final double priceWithDiscount = totalPrice * (1 - (double) discountPercent / 100);
+
+        double priceWithDiscount = totalPrice * (1 - (double) discountPercent / 100);
+        BigDecimal bd = new BigDecimal(priceWithDiscount);
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
+        priceWithDiscount = bd.doubleValue();
 
         if (isCancel) {
             cancel = "да";

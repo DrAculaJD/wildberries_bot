@@ -20,6 +20,7 @@ dependencies {
     implementation ("com.github.pengrad:java-telegram-bot-api:6.6.0")
     implementation ("org.telegram:telegrambots:5.3.0")
     implementation ("org.telegram:telegrambots-meta:5.2.0")
+    implementation ("org.slf4j:slf4j-simple:1.7.32")
 }
 
 tasks.test {
