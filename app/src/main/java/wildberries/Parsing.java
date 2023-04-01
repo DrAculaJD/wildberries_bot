@@ -8,7 +8,7 @@ import wildberries.types.Orders;
 
 public class Parsing {
 
-    public static List<Orders> parsing(String data) {
+    private static List<Orders> parsing(String data) {
         final ObjectMapper mapper = new ObjectMapper();
         List<Orders> result;
 
@@ -18,20 +18,19 @@ public class Parsing {
             throw new RuntimeException(e);
         }
 
-        System.out.println(dataToString(result));
         return result;
     }
 
-    public static String dataToString(List<Orders> orders) {
+    public static String dataToString(String data) {
         StringBuilder result = new StringBuilder();
         int counter = 1;
 
-        for (Orders str: orders) {
+        for (Orders str: parsing(data)) {
             result.append("Заказ №").append(counter).append("\n");
             result.append(str.toString()).append("\n");
             counter++;
         }
 
-        return result.toString();
+        return result.substring(0, result.length() - 2);
     }
 }
