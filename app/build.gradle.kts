@@ -16,7 +16,10 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.11")
     implementation ("com.fasterxml.jackson.core:jackson-core:2.15.0-rc2")
-    implementation ("com.fasterxml.jackson.core:jackson-databind:2.0.1")
+    implementation ("com.fasterxml.jackson.core:jackson-databind:2.12.7.1")
+    implementation ("com.github.pengrad:java-telegram-bot-api:6.6.0")
+    implementation ("org.telegram:telegrambots:5.3.0")
+    implementation ("org.telegram:telegrambots-meta:5.2.0")
 }
 
 tasks.test {

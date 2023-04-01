@@ -122,7 +122,7 @@ public class Orders {
     @Override
     public String toString() {
         String cancel = "нет";
-        final double priceWithDiscount = totalPrice * (1 - discountPercent / 100);
+        final double priceWithDiscount = totalPrice * (1 - (double) discountPercent / 100);
 
         if (isCancel) {
             cancel = "да";
