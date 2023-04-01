@@ -33,6 +33,7 @@ public class WBdata {
             System.out.println("Что-то пошло не так...");
         }
 
+        //System.out.println(result);
         return result;
     }
 }

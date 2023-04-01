@@ -1,40 +1,37 @@
 package wildberries;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import wildberries.types.Orders;
 
 public class Parsing {
 
-    private static Map<Object, Object> resultMap = new HashMap<>();
-    private static String data;
-
-    private static Map<Object, Object> parsing() {
+    public static List<Orders> parsing(String data) {
         final ObjectMapper mapper = new ObjectMapper();
+        List<Orders> result;
 
         try {
-            resultMap = mapper.readValue(data, new TypeReference<>() { });
+            result = mapper.readValue(data, new TypeReference<>() { });
         } catch (JsonProcessingException e) {
-            System.out.println("Что-то пошло не так...");
+            throw new RuntimeException(e);
         }
 
-        return resultMap;
+        System.out.println(dataToString(result));
+        return result;
     }
 
-    public static String dataToString(String dataForParsing) {
-        data = dataForParsing;
-        parsing();
-
+    public static String dataToString(List<Orders> orders) {
         StringBuilder result = new StringBuilder();
+        int counter = 1;
 
-        for (Map.Entry str: resultMap.entrySet()) {
+        for (Orders str: orders) {
+            result.append("Заказ №").append(counter).append("\n");
             result.append(str.toString()).append("\n");
+            counter++;
         }
 
-        System.out.println(result);
         return result.toString();
     }
 }
