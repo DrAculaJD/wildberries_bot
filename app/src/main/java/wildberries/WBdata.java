@@ -34,7 +34,6 @@ public class WBdata {
                     + "и попробуйте еще раз \uD83D\uDE80";
         }
 
-        //System.out.println(result);
         return result;
     }
 }

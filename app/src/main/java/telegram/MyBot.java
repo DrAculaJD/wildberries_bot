@@ -1,4 +1,4 @@
-package Telegram;
+package telegram;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -86,14 +86,14 @@ public class MyBot extends TelegramLongPollingBot {
             Parsing.dataToString(ordersToday);
 
             statisticsApiMessage = false;
-            otputMessage.setText("Отлично, можем приступать к работе!");
+            otputMessage.setText("Отлично, можем приступать к работе! ✨");
+            otputMessage.setReplyMarkup(setButtons());
         } catch (Exception e) {
             otputMessage.setText("К сожалению, этот ключ не работает, проверьте, правильно ли скопирован ключ "
                     + "и попробуйте еще раз \uD83D\uDE80");
         }
 
         try {
-            otputMessage.setReplyMarkup(setButtons());
             execute(otputMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
@@ -118,7 +118,14 @@ public class MyBot extends TelegramLongPollingBot {
     }
 
     private void getButtons (Update update) {
-        String inputData = update.getCallbackQuery().getData();
+
+        String inputData;
+
+        if (update.getCallbackQuery() == null) {
+            inputData = "";
+        } else {
+            inputData = update.getCallbackQuery().getData();
+        }
 
         SendMessage otputMessage = new SendMessage();
 
@@ -145,7 +152,6 @@ public class MyBot extends TelegramLongPollingBot {
 
         try {
             execute(otputMessage);
-            //getButtons(update);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }

@@ -25,6 +25,10 @@ public class Parsing {
         StringBuilder result = new StringBuilder();
         int counter = 1;
 
+        if (parsing(data).isEmpty()) {
+            return "Сегодня заказов еще не было.";
+        }
+
         for (Orders str: parsing(data)) {
             result.append("Заказ №").append(counter).append("\n");
             result.append(str.toString()).append("\n");
