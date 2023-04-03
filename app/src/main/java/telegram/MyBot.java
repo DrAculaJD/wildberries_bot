@@ -7,29 +7,25 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-import wildberries.Parsing;
+import telegram.data.Statistics;
 import wildberries.Shop;
-import wildberries.WBdata;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MyBot extends TelegramLongPollingBot {
 
-    private boolean firstStart = true;
-    private boolean statisticsApiMessage = true;
-    private final Shop shop = new Shop();
-
-    private String chatId;
+    public static final Shop shop = new Shop();
+    public final int API_LENGTH = 149;
 
     @Override
     public String getBotUsername() {
-        return "polezhaevTestBot";
+        return "testing_wb_bot";
     }
 
     @Override
     public String getBotToken() {
-        return "5699977622:AAFVfx9eVU6_-1lHGD1DB0VGCbbjtDc1878";
+        return "5751010883:AAFEAHtopRPUq8-U06bI1zfknRhAldzJR3s";
     }
 
     @Override
@@ -38,32 +34,32 @@ public class MyBot extends TelegramLongPollingBot {
         if (update.getMessage() != null) {
             String inputMessage = update.getMessage().getText();
 
-            if (inputMessage.equals("/start") && firstStart) {
+            if (inputMessage.equals("/start") && shop.isFirstStart()) {
                 startAction(update);
-            } else if (statisticsApiMessage && inputMessage.length() == 149) {
-                statisticsApi(update);
+            } else if (shop.isStatisticsApiMessage() && inputMessage.length() == API_LENGTH) {
+                sendMessage(Statistics.setStatisticsApi(update));
             }
         } else if (update.getCallbackQuery().getData().equals("Заказы сегодня")) {
-            getTodayOrders();
+            sendMessage(Statistics.getTodayOrders());
         }
 
-        if (!statisticsApiMessage) {
+        if (!shop.isStatisticsApiMessage()) {
             getButtons(update);
         }
 
     }
 
     private void startAction(Update update) {
-        firstStart = false;
-        chatId = update.getMessage().getChatId().toString();
+        shop.setFirstStart(false);
+        shop.setChatId(update.getMessage().getChatId().toString());
 
         SendMessage otputMessageFirst = new SendMessage();
-        otputMessageFirst.setChatId(chatId);
+        otputMessageFirst.setChatId(shop.getChatId());
         otputMessageFirst.setText("❗ Сообщаем вам, что все данные, которые передаются в этом боте, не защищены, " +
                 "так как это открытый проект. \nМы не несем ответственность за сохранность этих данных. ❗");
 
         SendMessage otputMessageNext = new SendMessage();
-        otputMessageNext.setChatId(update.getMessage().getChatId().toString());
+        otputMessageNext.setChatId(shop.getChatId());
         otputMessageNext.setText("Введите ваш ключ API \"Статистика\"");
 
         try {
@@ -74,33 +70,7 @@ public class MyBot extends TelegramLongPollingBot {
         }
     }
 
-    private void statisticsApi(Update update) {
-        String inputMessage = update.getMessage().getText().trim();
-        shop.setStatisticsApi(inputMessage);
-        final String ordersToday = WBdata.getOrdersForTheDay(shop.getStatisticsApi());
-
-        SendMessage otputMessage = new SendMessage();
-        otputMessage.setChatId(update.getMessage().getChatId().toString());
-
-        try {
-            Parsing.dataToString(ordersToday);
-
-            statisticsApiMessage = false;
-            otputMessage.setText("Отлично, можем приступать к работе! ✨");
-            otputMessage.setReplyMarkup(setButtons());
-        } catch (Exception e) {
-            otputMessage.setText("К сожалению, этот ключ не работает, проверьте, правильно ли скопирован ключ "
-                    + "и попробуйте еще раз \uD83D\uDE80");
-        }
-
-        try {
-            execute(otputMessage);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private InlineKeyboardMarkup setButtons() {
+    public static InlineKeyboardMarkup setButtons() {
 
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         InlineKeyboardButton ordersToday = new InlineKeyboardButton();
@@ -134,26 +104,18 @@ public class MyBot extends TelegramLongPollingBot {
         }
 
         otputMessage.setReplyMarkup(setButtons());
-        otputMessage.setChatId(chatId);
+        otputMessage.setChatId(shop.getChatId());
 
-        try {
-            execute(otputMessage);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+        sendMessage(otputMessage);
     }
 
-    private void getTodayOrders() {
-        final String ordersToday = WBdata.getOrdersForTheDay(shop.getStatisticsApi());
-
-        SendMessage otputMessage = new SendMessage();
-        otputMessage.setChatId(chatId);
-        otputMessage.setText(Parsing.dataToString(ordersToday));
+    public void sendMessage (SendMessage message) {
 
         try {
-            execute(otputMessage);
+            execute(message);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+
     }
 }

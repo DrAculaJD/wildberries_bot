@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class Orders {
+public class Order {
     @JsonIgnore
     private String date;
     @JsonIgnore

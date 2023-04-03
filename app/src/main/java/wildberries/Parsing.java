@@ -4,13 +4,13 @@ import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import wildberries.types.Orders;
+import wildberries.types.Order;
 
 public class Parsing {
 
-    private static List<Orders> parsing(String data) {
+    private static List<Order> parsing(String data) {
         final ObjectMapper mapper = new ObjectMapper();
-        List<Orders> result;
+        List<Order> result;
 
         try {
             result = mapper.readValue(data, new TypeReference<>() { });
@@ -29,7 +29,7 @@ public class Parsing {
             return "Сегодня заказов еще не было.";
         }
 
-        for (Orders str: parsing(data)) {
+        for (Order str: parsing(data)) {
             result.append("Заказ №").append(counter).append("\n");
             result.append(str.toString()).append("\n");
             counter++;
