@@ -30,8 +30,30 @@ public class WBdata {
 
             result = response.body().string();
         } catch (Exception e) {
-            return "К сожалению, этот ключ не работает, проверьте, правильно ли скопирован ключ "
-                    + "и попробуйте еще раз \uD83D\uDE80";
+            throw new RuntimeException(e);
+        }
+
+        return result;
+    }
+
+    public static String getSalessForTheDay(String apiKey) {
+        String url = "https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=" + FORMATTED_DATE;
+
+        String result;
+
+        try {
+            OkHttpClient client = new OkHttpClient().newBuilder()
+                    .build();
+            Request request = new Request.Builder()
+                    .url(url)
+                    .method("GET", null)
+                    .addHeader("Authorization", "Bearer " + apiKey)
+                    .build();
+            Response response = client.newCall(request).execute();
+
+            result = response.body().string();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
 
         return result;

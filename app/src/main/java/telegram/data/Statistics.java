@@ -19,7 +19,7 @@ public class Statistics {
         otputMessage.setChatId(shop.getChatId());
 
         try {
-            Parsing.dataToString(ordersToday);
+            Parsing.ordersToString(ordersToday);
 
             shop.setStatisticsApiMessage(false);
             otputMessage.setText("Отлично, можем приступать к работе! ✨");
@@ -37,7 +37,7 @@ public class Statistics {
         SendMessage outputMessage = new SendMessage();
 
         outputMessage.setChatId(shop.getChatId());
-        outputMessage.setText(Parsing.dataToString(ordersToday));
+        outputMessage.setText(Parsing.ordersToString(ordersToday));
 
         return outputMessage;
     }
