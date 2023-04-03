@@ -29,3 +29,9 @@ tasks.test {
 application {
     mainClass.set("main.Main")
 }
+
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "main.Main"
+    }
+}
