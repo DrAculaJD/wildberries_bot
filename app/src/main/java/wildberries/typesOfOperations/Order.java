@@ -1,4 +1,4 @@
-package wildberries.types;
+package wildberries.typesOfOperations;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -41,11 +41,11 @@ public class Order {
     private String sticker;
     @JsonIgnore
     private String srid;
-
+    @JsonIgnore
     public void setDate(String date) {
         this.date = date;
     }
-
+    @JsonIgnore
     public void setLastChangeDate(String lastChangeDate) {
         this.lastChangeDate = lastChangeDate;
     }
@@ -53,11 +53,11 @@ public class Order {
     public void setSupplierArticle(String supplierArticle) {
         this.supplierArticle = supplierArticle;
     }
-
+    @JsonIgnore
     public void setTechSize(String techSize) {
         this.techSize = techSize;
     }
-
+    @JsonIgnore
     public void setBarcode(String barcode) {
         this.barcode = barcode;
     }
@@ -77,23 +77,23 @@ public class Order {
     public void setOblast(String oblast) {
         this.oblast = oblast;
     }
-
+    @JsonIgnore
     public void setIncomeID(int incomeID) {
         this.incomeID = incomeID;
     }
-
+    @JsonIgnore
     public void setOdid(long odid) {
         this.odid = odid;
     }
-
+    @JsonIgnore
     public void setNmId(long nmId) {
         this.nmId = nmId;
     }
-
+    @JsonIgnore
     public void setSubject(String subject) {
         this.subject = subject;
     }
-
+    @JsonIgnore
     public void setCategory(String category) {
         this.category = category;
     }
@@ -105,19 +105,19 @@ public class Order {
     public void setCancel(boolean cancel) {
         isCancel = cancel;
     }
-
+    @JsonIgnore
     public void setCancel_dt(String cancelDt) {
         this.cancel_dt = cancelDt;
     }
-
+    @JsonIgnore
     public void setgNumber(String gNumber) {
         this.gNumber = gNumber;
     }
-
+    @JsonIgnore
     public void setSticker(String sticker) {
         this.sticker = sticker;
     }
-
+    @JsonIgnore
     public void setSrid(String srid) {
         this.srid = srid;
     }
@@ -132,7 +132,7 @@ public class Order {
         priceWithDiscount = bd.doubleValue();
 
         if (isCancel) {
-            cancel = "да";
+            cancel = "да ❌";
         }
 
         return "Бренд: " + brand + '\n'
