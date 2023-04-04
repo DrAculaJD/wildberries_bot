@@ -33,13 +33,7 @@ public class MyBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
 
         if (update.getMessage() != null) {
-            String inputMessage = update.getMessage().getText();
-
-            if (inputMessage.equals("/start")) {
-                startAction(update);
-            } else if (shop.isStatisticsApiMessage() && inputMessage.length() == API_LENGTH) {
-                sendMessage(Statistics.setStatisticsApi(update));
-            }
+            firstStart(update);
         } else if (update.getCallbackQuery().getData().equals("Заказы сегодня")) {
             sendMessage(Statistics.getTodayOrders());
         } else if (update.getCallbackQuery().getData().equals("Продажи сегодня")) {
@@ -50,6 +44,15 @@ public class MyBot extends TelegramLongPollingBot {
             getButtons(update);
         }
 
+    }
+
+    private void firstStart(Update update) {
+        String inputMessage = update.getMessage().getText();
+        if (inputMessage.equals("/start")) {
+            startAction(update);
+        } else if (shop.isStatisticsApiMessage() && inputMessage.length() == API_LENGTH) {
+            sendMessage(Statistics.setStatisticsApi(update));
+        }
     }
 
     private void startAction(Update update) {
@@ -124,8 +127,8 @@ public class MyBot extends TelegramLongPollingBot {
 
         try {
             execute(message);
-        } catch (TelegramApiValidationException e) {
-            e.printStackTrace();
+//        } catch (TelegramApiValidationException e) {
+//            e.printStackTrace();
         } catch (TelegramApiException e) {
             System.out.println("Message without text.");
         }
