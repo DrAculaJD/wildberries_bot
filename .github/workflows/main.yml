@@ -16,4 +16,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: Build
-        run: make build
+      - name: Publish code coverage
+        uses: paambaati/codeclimate-action@v3.2.0
+        env:
+          CC_TEST_REPORTER_ID: "316ae0b6ac12081ba558bfb7693bfb5656e052f49032c70836d346055a732141"
+          JACOCO_SOURCE_PATH: "${{github.workspace}}/app/src/main/java"
+        with:
+          coverageCommand: make report
+          debug: true
+          coverageLocations: ${{github.workspace}}/app/build/reports/jacoco/test/jacocoTestReport.xml:jacoco
