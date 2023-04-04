@@ -15,8 +15,7 @@ import java.util.List;
 
 public class MyBot extends TelegramLongPollingBot {
 
-    public static final Shop shop = new Shop();
-    public final int API_LENGTH = 149;
+    public static final Shop SHOP = new Shop();
 
     @Override
     public String getBotUsername() {
@@ -34,12 +33,12 @@ public class MyBot extends TelegramLongPollingBot {
         if (update.getMessage() != null) {
             firstStart(update);
         } else if (update.getCallbackQuery().getData().equals("Заказы сегодня")) {
-            sendMessage(Statistics.getTodayOrders());
+            sendMessage(Statistics.getTodayData("order"));
         } else if (update.getCallbackQuery().getData().equals("Продажи сегодня")) {
-            sendMessage(Statistics.getTodaySales());
+            sendMessage(Statistics.getTodayData("sale"));
         }
 
-        if (!shop.isStatisticsApiMessage()) {
+        if (!SHOP.isStatisticsApiMessage()) {
             getButtons(update);
         }
 
@@ -47,24 +46,26 @@ public class MyBot extends TelegramLongPollingBot {
 
     private void firstStart(Update update) {
         String inputMessage = update.getMessage().getText();
+        final int apiLength = 149;
+
         if (inputMessage.equals("/start")) {
             startAction(update);
-        } else if (shop.isStatisticsApiMessage() && inputMessage.length() == API_LENGTH) {
+        } else if (SHOP.isStatisticsApiMessage() && inputMessage.length() == apiLength) {
             sendMessage(Statistics.setStatisticsApi(update));
         }
     }
 
     private void startAction(Update update) {
-        shop.setStatisticsApiMessage(true);
-        shop.setChatId(update.getMessage().getChatId().toString());
+        SHOP.setStatisticsApiMessage(true);
+        SHOP.setChatId(update.getMessage().getChatId().toString());
 
         SendMessage outputMessageFirst = new SendMessage();
-        outputMessageFirst.setChatId(shop.getChatId());
-        outputMessageFirst.setText("❗ Сообщаем вам, что все данные, которые передаются в этом боте, не защищены, " +
-                "так как это открытый проект. \nМы не несем ответственность за сохранность этих данных. ❗");
+        outputMessageFirst.setChatId(SHOP.getChatId());
+        outputMessageFirst.setText("❗ Сообщаем вам, что все данные, которые передаются в этом боте, не защищены, "
+                + "так как это открытый проект. \nМы не несем ответственность за сохранность этих данных. ❗");
 
         SendMessage outputMessageNext = new SendMessage();
-        outputMessageNext.setChatId(shop.getChatId());
+        outputMessageNext.setChatId(SHOP.getChatId());
         outputMessageNext.setText("Введите ваш ключ API \"Статистика\"");
 
         try {
@@ -100,7 +101,7 @@ public class MyBot extends TelegramLongPollingBot {
         return markupInline;
     }
 
-    private void getButtons (Update update) {
+    private void getButtons(Update update) {
 
         String inputData;
 
@@ -117,17 +118,15 @@ public class MyBot extends TelegramLongPollingBot {
         }
 
         outputMessage.setReplyMarkup(setButtons());
-        outputMessage.setChatId(shop.getChatId());
+        outputMessage.setChatId(SHOP.getChatId());
 
         sendMessage(outputMessage);
     }
 
-    public void sendMessage (SendMessage message) {
+    public void sendMessage(SendMessage message) {
 
         try {
             execute(message);
-//        } catch (TelegramApiValidationException e) {
-//            e.printStackTrace();
         } catch (TelegramApiException e) {
             System.out.println("Message without text.");
         }

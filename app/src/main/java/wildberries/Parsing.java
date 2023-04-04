@@ -9,15 +9,24 @@ import wildberries.typesOfOperations.Sale;
 
 public class Parsing {
 
-    private static final StringBuilder BUILDER = new StringBuilder();
-    private static int counter = 1;
+    private static String reportMessage;
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    private static List<Order> parsingOrders(String data) {
-        List<Order> result;
+    private static List<?> parsingData(String data, String typeOfData) {
+        List<?> result = null;
 
         try {
-            result = MAPPER.readValue(data, new TypeReference<>() { });
+
+            if (typeOfData.equals("order")) {
+                result = MAPPER.readValue(data, new TypeReference<List<Order>>() {
+                });
+                reportMessage = "Заказ №";
+            } else if (typeOfData.equals("sale")) {
+                result = MAPPER.readValue(data, new TypeReference<List<Sale>>() {
+                });
+                reportMessage = "Продажа №";
+            }
+
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -25,45 +34,21 @@ public class Parsing {
         return result;
     }
 
-    private static List<Sale> parsingSales(String data) {
-        List<Sale> result;
+    public static String dataToString(String data, String typeOfData) {
 
-        try {
-            result = MAPPER.readValue(data, new TypeReference<>() { });
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+        final StringBuilder builder = new StringBuilder();
+        int counter = 1;
+
+        if (parsingData(data, typeOfData).isEmpty()) {
+            return "Данных за сегодня еще нет \uD83D\uDCB9";
         }
 
-        return result;
-    }
-
-    public static String ordersToString(String data) {
-
-        if (parsingOrders(data).isEmpty()) {
-            return "Сегодня заказов еще не было \uD83D\uDCB9";
-        }
-
-        for (Order str: parsingOrders(data)) {
-            BUILDER.append("Заказ №").append(counter).append("\n");
-            BUILDER.append(str.toString()).append("\n");
+        for (Object str : parsingData(data, typeOfData)) {
+            builder.append(reportMessage).append(counter).append("\n");
+            builder.append(str.toString()).append("\n");
             counter++;
         }
 
-        return BUILDER.substring(0, BUILDER.length() - 2);
-    }
-
-    public static String salesToString(String data) {
-
-        if (parsingSales(data).isEmpty()) {
-            return "Сегодня продаж еще не было \uD83D\uDCB9";
-        }
-
-        for (Sale str: parsingSales(data)) {
-            BUILDER.append("Продажа №").append(counter).append("\n");
-            BUILDER.append(str.toString()).append("\n");
-            counter++;
-        }
-
-        return BUILDER.substring(0, BUILDER.length() - 2);
+        return builder.substring(0, builder.length() - 2);
     }
 }

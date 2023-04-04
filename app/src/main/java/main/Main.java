@@ -14,9 +14,10 @@ public class Main {
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
-        try{
+
+        try {
             telegramBotsApi.registerBot(new MyBot());
-        } catch (TelegramApiException e){
+        } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
     }

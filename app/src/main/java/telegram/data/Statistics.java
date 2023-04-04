@@ -6,7 +6,7 @@ import wildberries.Parsing;
 import wildberries.WBdata;
 
 import static telegram.MyBot.setButtons;
-import static telegram.MyBot.shop;
+import static telegram.MyBot.SHOP;
 
 public class Statistics {
 
@@ -14,16 +14,16 @@ public class Statistics {
 
     public static SendMessage setStatisticsApi(Update update) {
         String inputMessage = update.getMessage().getText().trim();
-        shop.setStatisticsApi(inputMessage);
-        final String ordersToday = WBdata.getOrdersForTheDay(shop.getStatisticsApi());
+        SHOP.setStatisticsApi(inputMessage);
+        final String ordersToday = WBdata.getDataForTheDay(SHOP.getStatisticsApi(), "order");
 
         SendMessage outputMessage = new SendMessage();
-        outputMessage.setChatId(shop.getChatId());
+        outputMessage.setChatId(SHOP.getChatId());
 
         try {
-            Parsing.ordersToString(ordersToday);
+            Parsing.dataToString(ordersToday, "order");
 
-            shop.setStatisticsApiMessage(false);
+            SHOP.setStatisticsApiMessage(false);
             outputMessage.setText("Отлично, можем приступать к работе! ✨");
             outputMessage.setReplyMarkup(setButtons());
         } catch (Exception e) {
@@ -34,20 +34,11 @@ public class Statistics {
         return outputMessage;
     }
 
-    public static SendMessage getTodayOrders() {
-        final String ordersToday = WBdata.getOrdersForTheDay(shop.getStatisticsApi());
+    public static SendMessage getTodayData(String typeOfData) {
+        final String ordersToday = WBdata.getDataForTheDay(SHOP.getStatisticsApi(), typeOfData);
 
-        OUTPUT_MESSAGE.setChatId(shop.getChatId());
-        OUTPUT_MESSAGE.setText(Parsing.ordersToString(ordersToday));
-
-        return OUTPUT_MESSAGE;
-    }
-
-    public static SendMessage getTodaySales() {
-        final String salesToday = WBdata.getSalesForTheDay(shop.getStatisticsApi());
-
-        OUTPUT_MESSAGE.setChatId(shop.getChatId());
-        OUTPUT_MESSAGE.setText(Parsing.salesToString(salesToday));
+        OUTPUT_MESSAGE.setChatId(SHOP.getChatId());
+        OUTPUT_MESSAGE.setText(Parsing.dataToString(ordersToday, typeOfData));
 
         return OUTPUT_MESSAGE;
     }
