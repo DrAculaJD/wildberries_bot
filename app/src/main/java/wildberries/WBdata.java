@@ -36,7 +36,7 @@ public class WBdata {
         return result;
     }
 
-    public static String getSalessForTheDay(String apiKey) {
+    public static String getSalesForTheDay(String apiKey) {
         String url = "https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=" + FORMATTED_DATE;
 
         String result;

@@ -60,7 +60,7 @@ public class Parsing {
             return "Сегодня продаж еще не было \uD83D\uDCB9";
         }
 
-        for (Order str: parsingOrders(data)) {
+        for (Sale str: parsingSales(data)) {
             result.append("Продажа №").append(counter).append("\n");
             result.append(str.toString()).append("\n");
             counter++;

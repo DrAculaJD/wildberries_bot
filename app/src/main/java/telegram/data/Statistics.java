@@ -15,21 +15,21 @@ public class Statistics {
         shop.setStatisticsApi(inputMessage);
         final String ordersToday = WBdata.getOrdersForTheDay(shop.getStatisticsApi());
 
-        SendMessage otputMessage = new SendMessage();
-        otputMessage.setChatId(shop.getChatId());
+        SendMessage outputMessage = new SendMessage();
+        outputMessage.setChatId(shop.getChatId());
 
         try {
             Parsing.ordersToString(ordersToday);
 
             shop.setStatisticsApiMessage(false);
-            otputMessage.setText("Отлично, можем приступать к работе! ✨");
-            otputMessage.setReplyMarkup(setButtons());
+            outputMessage.setText("Отлично, можем приступать к работе! ✨");
+            outputMessage.setReplyMarkup(setButtons());
         } catch (Exception e) {
-            otputMessage.setText("К сожалению, этот ключ не работает, проверьте, правильно ли скопирован ключ "
+            outputMessage.setText("К сожалению, этот ключ не работает, проверьте, правильно ли скопирован ключ "
                     + "и попробуйте еще раз \uD83D\uDE80");
         }
 
-        return otputMessage;
+        return outputMessage;
     }
 
     public static SendMessage getTodayOrders() {
@@ -38,6 +38,16 @@ public class Statistics {
 
         outputMessage.setChatId(shop.getChatId());
         outputMessage.setText(Parsing.ordersToString(ordersToday));
+
+        return outputMessage;
+    }
+
+    public static SendMessage getTodaySales() {
+        final String salesToday = WBdata.getSalesForTheDay(shop.getStatisticsApi());
+        SendMessage outputMessage = new SendMessage();
+
+        outputMessage.setChatId(shop.getChatId());
+        outputMessage.setText(Parsing.salesToString(salesToday));
 
         return outputMessage;
     }
