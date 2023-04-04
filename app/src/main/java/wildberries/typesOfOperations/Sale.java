@@ -9,10 +9,9 @@ import java.math.RoundingMode;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Sale {
     private String supplierArticle;
+    private String saleID;
     private int forPay;
     private String brand;
-    @JsonProperty("isStorno")
-    private int isStorno;
 
     public void setSupplierArticle(String supplierArticle) {
         this.supplierArticle = supplierArticle;
@@ -23,15 +22,15 @@ public class Sale {
     public void setBrand(String brand) {
         this.brand = brand;
     }
-
-    public void setIsStorno(int isStorno) {
-        this.isStorno = isStorno;
+    public void setSaleID(String saleID) {
+        this.saleID = saleID;
     }
+
     @Override
     public String toString() {
 
         String cancel = "нет";
-        if (isStorno == 1) {
+        if (saleID.contains("R")) {
             cancel = "да ❌";
         }
 

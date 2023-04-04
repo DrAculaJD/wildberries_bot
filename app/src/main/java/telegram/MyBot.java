@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
+import org.telegram.telegrambots.meta.exceptions.TelegramApiValidationException;
 import telegram.data.Statistics;
 import wildberries.Shop;
 
@@ -41,6 +42,8 @@ public class MyBot extends TelegramLongPollingBot {
             }
         } else if (update.getCallbackQuery().getData().equals("Заказы сегодня")) {
             sendMessage(Statistics.getTodayOrders());
+        } else if (update.getCallbackQuery().getData().equals("Продажи сегодня")) {
+            sendMessage(Statistics.getTodaySales());
         }
 
         if (!shop.isStatisticsApiMessage()) {
@@ -53,18 +56,18 @@ public class MyBot extends TelegramLongPollingBot {
         shop.setStatisticsApiMessage(true);
         shop.setChatId(update.getMessage().getChatId().toString());
 
-        SendMessage otputMessageFirst = new SendMessage();
-        otputMessageFirst.setChatId(shop.getChatId());
-        otputMessageFirst.setText("❗ Сообщаем вам, что все данные, которые передаются в этом боте, не защищены, " +
+        SendMessage outputMessageFirst = new SendMessage();
+        outputMessageFirst.setChatId(shop.getChatId());
+        outputMessageFirst.setText("❗ Сообщаем вам, что все данные, которые передаются в этом боте, не защищены, " +
                 "так как это открытый проект. \nМы не несем ответственность за сохранность этих данных. ❗");
 
-        SendMessage otputMessageNext = new SendMessage();
-        otputMessageNext.setChatId(shop.getChatId());
-        otputMessageNext.setText("Введите ваш ключ API \"Статистика\"");
+        SendMessage outputMessageNext = new SendMessage();
+        outputMessageNext.setChatId(shop.getChatId());
+        outputMessageNext.setText("Введите ваш ключ API \"Статистика\"");
 
         try {
-            execute(otputMessageFirst);
-            execute(otputMessageNext);
+            execute(outputMessageFirst);
+            execute(outputMessageNext);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -73,15 +76,23 @@ public class MyBot extends TelegramLongPollingBot {
     public static InlineKeyboardMarkup setButtons() {
 
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+
         InlineKeyboardButton ordersToday = new InlineKeyboardButton();
         ordersToday.setText("Заказы сегодня");
         ordersToday.setCallbackData("Заказы сегодня");
 
-        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
-        List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        rowInline.add(ordersToday);
+        InlineKeyboardButton salesToday = new InlineKeyboardButton();
+        salesToday.setText("Продажи сегодня");
+        salesToday.setCallbackData("Продажи сегодня");
 
-        rowsInline.add(rowInline);
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline1 = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline2 = new ArrayList<>();
+        rowInline1.add(ordersToday);
+        rowInline2.add(salesToday);
+
+        rowsInline.add(rowInline1);
+        rowsInline.add(rowInline2);
         markupInline.setKeyboard(rowsInline);
 
         return markupInline;
@@ -97,25 +108,26 @@ public class MyBot extends TelegramLongPollingBot {
             inputData = update.getCallbackQuery().getData();
         }
 
-        SendMessage otputMessage = new SendMessage();
+        SendMessage outputMessage = new SendMessage();
 
-        if (inputData.equals("Заказы сегодня")) {
-            otputMessage.setText("Выберите действие");
+        if (!inputData.isEmpty()) {
+            outputMessage.setText("Выберите действие");
         }
 
-        otputMessage.setReplyMarkup(setButtons());
-        otputMessage.setChatId(shop.getChatId());
+        outputMessage.setReplyMarkup(setButtons());
+        outputMessage.setChatId(shop.getChatId());
 
-        sendMessage(otputMessage);
+        sendMessage(outputMessage);
     }
 
     public void sendMessage (SendMessage message) {
 
         try {
             execute(message);
+        } catch (TelegramApiValidationException e) {
+            e.printStackTrace();
         } catch (TelegramApiException e) {
             System.out.println("Message without text.");
         }
-
     }
 }

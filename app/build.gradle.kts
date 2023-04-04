@@ -1,6 +1,7 @@
 plugins {
     id("java")
     id("application")
+    id("jacoco")
 }
 
 group = "org.example"
@@ -13,6 +14,7 @@ repositories {
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.assertj:assertj-core:3.11.1")
     implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.11")
     implementation ("com.fasterxml.jackson.core:jackson-core:2.15.0-rc2")
     implementation ("com.fasterxml.jackson.core:jackson-databind:2.12.7.1")
@@ -33,5 +35,11 @@ application {
 tasks.jar {
     manifest {
         attributes["Main-Class"] = "main.Main"
+    }
+}
+
+tasks.jacocoTestReport {
+    reports {
+        xml.required.set(true)
     }
 }
