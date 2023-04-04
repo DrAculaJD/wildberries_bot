@@ -34,7 +34,7 @@ public class MyBot extends TelegramLongPollingBot {
         if (update.getMessage() != null) {
             String inputMessage = update.getMessage().getText();
 
-            if (inputMessage.equals("/start") && shop.isFirstStart()) {
+            if (inputMessage.equals("/start")) {
                 startAction(update);
             } else if (shop.isStatisticsApiMessage() && inputMessage.length() == API_LENGTH) {
                 sendMessage(Statistics.setStatisticsApi(update));
@@ -50,7 +50,7 @@ public class MyBot extends TelegramLongPollingBot {
     }
 
     private void startAction(Update update) {
-        shop.setFirstStart(false);
+        shop.setStatisticsApiMessage(true);
         shop.setChatId(update.getMessage().getChatId().toString());
 
         SendMessage otputMessageFirst = new SendMessage();
@@ -114,7 +114,7 @@ public class MyBot extends TelegramLongPollingBot {
         try {
             execute(message);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            System.out.println("Message without text.");
         }
 
     }

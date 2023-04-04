@@ -4,8 +4,6 @@ public class Shop {
     private String statisticsApi;
     private String standartApi;
     private String advertisingApi;
-
-    private boolean firstStart = true;
     private boolean statisticsApiMessage = true;
     private String chatId;
 
@@ -31,14 +29,6 @@ public class Shop {
 
     public void setAdvertisingApi(String advertisingApi) {
         this.advertisingApi = advertisingApi;
-    }
-
-    public boolean isFirstStart() {
-        return firstStart;
-    }
-
-    public void setFirstStart(boolean firstStart) {
-        this.firstStart = firstStart;
     }
 
     public boolean isStatisticsApiMessage() {

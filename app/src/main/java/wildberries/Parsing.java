@@ -56,7 +56,7 @@ public class Parsing {
         StringBuilder result = new StringBuilder();
         int counter = 1;
 
-        if (parsingOrders(data).isEmpty()) {
+        if (parsingSales(data).isEmpty()) {
             return "Сегодня продаж еще не было \uD83D\uDCB9";
         }
 
