@@ -12,13 +12,14 @@ public class WBdata {
     private static final LocalDate CURRENT_DATE = LocalDate.now();
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static  String formattedDate = CURRENT_DATE.format(FORMATTER);
+    private static final String URL = "https://statistics-api.wildberries.ru/api/v1/supplier";
 
     public static void setFormattedDate(String formattedDate) {
         WBdata.formattedDate = formattedDate;
     }
 
     public static String getOrdersForTheDay(String apiKey) {
-        String url = "https://statistics-api.wildberries.ru/api/v1/supplier/orders?dateFrom=" + formattedDate;
+        String url = URL + "/orders?dateFrom=" + formattedDate;
 
         String result;
 
@@ -41,7 +42,7 @@ public class WBdata {
     }
 
     public static String getSalesForTheDay(String apiKey) {
-        String url = "https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=" + formattedDate;
+        String url = URL + "/sales?dateFrom=" + formattedDate;
 
         String result;
 
