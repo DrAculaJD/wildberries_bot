@@ -10,8 +10,6 @@ import static telegram.MyBot.SHOP;
 
 public class Statistics {
 
-    private static final SendMessage OUTPUT_MESSAGE = new SendMessage();
-
     public static SendMessage setStatisticsApi(Update update) {
         String inputMessage = update.getMessage().getText().trim();
         SHOP.setStatisticsApi(inputMessage);
@@ -35,11 +33,12 @@ public class Statistics {
     }
 
     public static SendMessage getTodayData(String typeOfData) {
+        final SendMessage outputMessage = new SendMessage();
         final String ordersToday = WBdata.getDataForTheDay(SHOP.getStatisticsApi(), typeOfData);
 
-        OUTPUT_MESSAGE.setChatId(SHOP.getChatId());
-        OUTPUT_MESSAGE.setText(Parsing.dataToString(ordersToday, typeOfData));
+        outputMessage.setChatId(SHOP.getChatId());
+        outputMessage.setText(Parsing.dataToString(ordersToday, typeOfData));
 
-        return OUTPUT_MESSAGE;
+        return outputMessage;
     }
 }

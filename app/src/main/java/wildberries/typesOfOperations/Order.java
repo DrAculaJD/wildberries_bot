@@ -42,7 +42,7 @@ public class Order {
 
     @Override
     public String toString() {
-        String cancel = "нет";
+        String cancel = "нет \uD83D\uDC4D\n";
 
         double priceWithDiscount = totalPrice * (1 - (double) discountPercent / 100);
         BigDecimal bd = new BigDecimal(priceWithDiscount);

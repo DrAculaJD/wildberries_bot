@@ -28,7 +28,7 @@ public class Sale {
     @Override
     public String toString() {
 
-        String cancel = "нет";
+        String cancel = "нет \uD83D\uDC4D\n";
         if (saleID.contains("R")) {
             cancel = "да ❌";
         }
