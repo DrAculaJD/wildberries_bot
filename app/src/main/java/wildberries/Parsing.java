@@ -10,19 +10,19 @@ import wildberries.typesOfOperations.Sale;
 public class Parsing {
 
     private static String reportMessage;
-    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private static List<?> parsingData(String data, String typeOfData) {
+        final ObjectMapper mapper = new ObjectMapper();
         List<?> result = null;
 
         try {
 
             if (typeOfData.equals("order")) {
-                result = MAPPER.readValue(data, new TypeReference<List<Order>>() {
+                result = mapper.readValue(data, new TypeReference<List<Order>>() {
                 });
                 reportMessage = "Заказ №";
             } else if (typeOfData.equals("sale")) {
-                result = MAPPER.readValue(data, new TypeReference<List<Sale>>() {
+                result = mapper.readValue(data, new TypeReference<List<Sale>>() {
                 });
                 reportMessage = "Продажа №";
             }
