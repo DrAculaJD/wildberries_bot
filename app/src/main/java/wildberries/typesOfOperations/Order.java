@@ -7,8 +7,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Order {
+public class Order implements StatisticsData {
     private String supplierArticle;
+    private String date;
+    private String lastChangeDate;
     private double totalPrice;
     private int discountPercent;
     private String warehouseName;
@@ -17,6 +19,22 @@ public class Order {
     @JsonProperty("isCancel")
     private boolean isCancel;
 
+    @Override
+    public String getLastChangeOrderDate() {
+        return lastChangeDate.substring(0, 10);
+    }
+
+    public String getDate() {
+        return date.substring(0, 10);
+    }
+
+    public void setLastChangeDate(String newLastChangeDate) {
+        lastChangeDate = newLastChangeDate;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
     public void setSupplierArticle(String supplierArticle) {
         this.supplierArticle = supplierArticle;
     }
@@ -54,6 +72,7 @@ public class Order {
         }
 
         return "Бренд: " + brand + '\n'
+                + "Время заказа: " + date.substring(0, 10) + " " + date.substring(11) + '\n'
                 + "Артикул продавца: " + supplierArticle + '\n'
                 + "Стоимость: " + priceWithDiscount + " руб." + '\n'
                 + "Склад продажи: " + warehouseName + '\n'

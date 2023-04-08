@@ -6,12 +6,29 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Sale {
+public class Sale implements StatisticsData {
     private String supplierArticle;
+    private String date;
+    private String lastChangeDate;
     private String saleID;
     private int forPay;
     private String brand;
 
+    @Override
+    public String getDate() {
+        return date.substring(0, 10);
+    }
+
+    @Override
+    public String getLastChangeOrderDate() {
+        return lastChangeDate.substring(0, 10);
+    }
+    public void setLastChangeDate(String newLastChangeDate) {
+        lastChangeDate = newLastChangeDate;
+    }
+    public void setDate(String date) {
+        this.date = date;
+    }
     public void setSupplierArticle(String supplierArticle) {
         this.supplierArticle = supplierArticle;
     }
@@ -38,9 +55,11 @@ public class Sale {
         bd = bd.setScale(2, RoundingMode.HALF_UP);
         amount = bd.doubleValue();
 
-        return "Артикул продавца: " + supplierArticle + '\n'
+        return "Время заказа: " + date.substring(0, 10) + " " + date.substring(11) + '\n'
                 + "Бренд товара: " + brand + '\n'
+                + "Артикул продавца: " + supplierArticle + '\n'
                 + "К перечислению поставщику: " + amount + '\n'
                 + "Возврат: " + cancel + '\n';
     }
+
 }
