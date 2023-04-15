@@ -10,8 +10,8 @@ import java.math.RoundingMode;
 public class Order implements StatisticsData {
     private String supplierArticle;
     private String date;
-    private String lastChangeDate;
     private double totalPrice;
+    private String subject;
     private int discountPercent;
     private String warehouseName;
     private String oblast;
@@ -19,19 +19,9 @@ public class Order implements StatisticsData {
     @JsonProperty("isCancel")
     private boolean isCancel;
 
-    @Override
-    public String getLastChangeOrderDate() {
-        return lastChangeDate.substring(0, 10);
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
-
-    public String getDate() {
-        return date.substring(0, 10);
-    }
-
-    public void setLastChangeDate(String newLastChangeDate) {
-        lastChangeDate = newLastChangeDate;
-    }
-
     public void setDate(String date) {
         this.date = date;
     }
@@ -71,8 +61,9 @@ public class Order implements StatisticsData {
             cancel = "да ❌";
         }
 
-        return "Бренд: " + brand + '\n'
-                + "Время заказа: " + date.substring(0, 10) + " " + date.substring(11) + '\n'
+        return "Время заказа: " + date.substring(0, 10) + " " + date.substring(11) + '\n'
+                + "Бренд: " + brand + '\n'
+                + "Тип товара: " + subject + '\n'
                 + "Артикул продавца: " + supplierArticle + '\n'
                 + "Стоимость: " + priceWithDiscount + " руб." + '\n'
                 + "Склад продажи: " + warehouseName + '\n'

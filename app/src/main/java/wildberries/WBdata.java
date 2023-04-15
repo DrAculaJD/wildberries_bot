@@ -1,51 +1,31 @@
 package wildberries;
 
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class WBdata {
 
-    private static final String SALES_REQUEST = "/sales?dateFrom=";
-    private static final String ORDERS_REQUEST = "/orders?dateFrom=";
-    private static  String currentRequest;
+    private static final String SALES_REQUEST = "/sales";
+    private static final String ORDERS_REQUEST = "/orders";
     private static final String PRE_URL = "https://statistics-api.wildberries.ru/api/v1/supplier";
 
-    public static void setCurrentRequest(String typeOfData) {
-
-        if (typeOfData.equals("sale")) {
-            currentRequest = SALES_REQUEST;
-        } else if (typeOfData.equals("order")) {
-            currentRequest = ORDERS_REQUEST;
-        }
-
-    }
-
-    public static String getDate() {
-        final ZoneId zoneId = ZoneId.of("Europe/Moscow");
-        final LocalDate currentDate = LocalDate.now(zoneId);
-        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        return currentDate.format(formatter);
-    }
-
     public static String getDataForTheDay(String apiKey, String typeOfData) {
-        setCurrentRequest(typeOfData);
-        final String url = PRE_URL + currentRequest + getDate();
-
         String result;
 
         try {
-            OkHttpClient client = new OkHttpClient().newBuilder()
-                    .build();
+            OkHttpClient client = new OkHttpClient();
+
             Request request = new Request.Builder()
-                    .url(url)
+                    .url(getUrl(typeOfData))
                     .addHeader("Authorization", "Bearer " + apiKey)
                     .build();
+            //System.out.println(request);
             Response response = client.newCall(request).execute();
 
             result = response.body().string();
@@ -54,5 +34,28 @@ public class WBdata {
         }
 
         return result;
+    }
+
+    private static String getUrl(String typeOfData) {
+        String request;
+
+        if (typeOfData.equals("sale")) {
+            request = SALES_REQUEST;
+        } else {
+            request = ORDERS_REQUEST;
+        }
+
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(PRE_URL + request)).newBuilder();
+        urlBuilder.addQueryParameter("dateFrom", getDate());
+        urlBuilder.addQueryParameter("flag", "1");
+
+        return urlBuilder.build().toString();
+    }
+
+    private static String getDate() {
+        final LocalDate currentDate = LocalDate.now();
+        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        return currentDate.format(formatter);
     }
 }

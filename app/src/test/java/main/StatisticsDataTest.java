@@ -16,11 +16,21 @@ public class StatisticsDataTest {
     }
 
     @Test
-    public void orderTest() {
+    public void ordersTest() {
         final String ordersToday = WBdata.getDataForTheDay(SHOP.getStatisticsApi(), "order");
         final String result = Parsing.dataToString(ordersToday, "order");
 
-        //System.out.println(result);
+        System.out.println(ordersToday);
+        System.out.println(result);
+    }
+
+    @Test
+    public void salesTest() {
+        final String salesToday = WBdata.getDataForTheDay(SHOP.getStatisticsApi(), "sale");
+        final String result = Parsing.dataToString(salesToday, "sale");
+
+        System.out.println(salesToday);
+        System.out.println(result);
     }
 
 }

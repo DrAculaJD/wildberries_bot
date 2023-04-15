@@ -9,22 +9,13 @@ import java.math.RoundingMode;
 public class Sale implements StatisticsData {
     private String supplierArticle;
     private String date;
-    private String lastChangeDate;
     private String saleID;
+    private String subject;
     private int forPay;
     private String brand;
 
-    @Override
-    public String getDate() {
-        return date.substring(0, 10);
-    }
-
-    @Override
-    public String getLastChangeOrderDate() {
-        return lastChangeDate.substring(0, 10);
-    }
-    public void setLastChangeDate(String newLastChangeDate) {
-        lastChangeDate = newLastChangeDate;
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
     public void setDate(String date) {
         this.date = date;
@@ -55,7 +46,8 @@ public class Sale implements StatisticsData {
         bd = bd.setScale(2, RoundingMode.HALF_UP);
         amount = bd.doubleValue();
 
-        return "Время заказа: " + date.substring(0, 10) + " " + date.substring(11) + '\n'
+        return "Время продажи: " + date.substring(0, 10) + " " + date.substring(11) + '\n'
+                + "Тип товара: " + subject + '\n'
                 + "Бренд товара: " + brand + '\n'
                 + "Артикул продавца: " + supplierArticle + '\n'
                 + "К перечислению поставщику: " + amount + '\n'

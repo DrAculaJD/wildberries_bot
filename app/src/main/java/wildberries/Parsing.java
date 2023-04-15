@@ -13,15 +13,15 @@ public class Parsing {
     private static String reportMessage;
 
     public static String dataToString(String data, String typeOfData) {
-        List<? extends StatisticsData> filteredData = dataFiltering(data, typeOfData);
+        List<? extends StatisticsData> dataToFormat = parsingData(data, typeOfData);
         final StringBuilder builder = new StringBuilder();
         int counter = 1;
 
-        if (filteredData.size() == 0) {
+        if (dataToFormat.size() == 0) {
             return "Данных за сегодня еще нет \uD83D\uDCB9";
         }
 
-        for (Object str : filteredData) {
+        for (Object str : dataToFormat) {
             builder.append(reportMessage).append(counter).append("\n");
             builder.append(str.toString()).append("\n");
             counter++;
@@ -51,14 +51,5 @@ public class Parsing {
         }
 
         return result;
-    }
-
-    private static List<? extends StatisticsData> dataFiltering(String data, String typeOfData) {
-        final String todayDate = WBdata.getDate();
-        List<? extends StatisticsData> dataToFilter = parsingData(data, typeOfData);
-
-        return dataToFilter.stream()
-                .filter(dat -> dat.getLastChangeOrderDate().equals(dat.getDate()) && dat.getDate().equals(todayDate))
-                .toList();
     }
 }
