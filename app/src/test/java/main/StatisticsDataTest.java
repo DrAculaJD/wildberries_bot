@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import wildberries.Parsing;
 import wildberries.WBdata;
+import wildberries.typesOfOperations.TypeOfOperations;
 
 import static telegram.MyBot.SHOP;
 
@@ -17,8 +18,8 @@ public class StatisticsDataTest {
 
     @Test
     public void ordersTest() {
-        final String ordersToday = WBdata.getDataForTheDay(SHOP.getStatisticsApi(), "order");
-        final String result = Parsing.dataToString(ordersToday, "order");
+        final String ordersToday = WBdata.getDataForTheDay(SHOP.getStatisticsApi(), TypeOfOperations.ORDER);
+        final String result = Parsing.dataToString(ordersToday, TypeOfOperations.ORDER);
 
         System.out.println(ordersToday);
         System.out.println(result);
@@ -26,8 +27,8 @@ public class StatisticsDataTest {
 
     @Test
     public void salesTest() {
-        final String salesToday = WBdata.getDataForTheDay(SHOP.getStatisticsApi(), "sale");
-        final String result = Parsing.dataToString(salesToday, "sale");
+        final String salesToday = WBdata.getDataForTheDay(SHOP.getStatisticsApi(), TypeOfOperations.SALE);
+        final String result = Parsing.dataToString(salesToday, TypeOfOperations.SALE);
 
         System.out.println(salesToday);
         System.out.println(result);

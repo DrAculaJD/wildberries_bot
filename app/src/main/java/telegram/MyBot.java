@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import telegram.data.Statistics;
 import wildberries.Shop;
+import wildberries.typesOfOperations.TypeOfOperations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,9 +40,9 @@ public class MyBot extends TelegramLongPollingBot {
         if (update.getMessage() != null) {
             firstStart(update);
         } else if (update.getCallbackQuery().getData().equals("Заказы сегодня")) {
-            sendMessage(Statistics.getTodayData("order"));
+            sendMessage(Statistics.getTodayData(TypeOfOperations.ORDER));
         } else if (update.getCallbackQuery().getData().equals("Продажи сегодня")) {
-            sendMessage(Statistics.getTodayData("sale"));
+            sendMessage(Statistics.getTodayData(TypeOfOperations.SALE));
         }
 
         if (!SHOP.isStatisticsApiMessage()) {

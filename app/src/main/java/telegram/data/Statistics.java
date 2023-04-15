@@ -4,6 +4,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import wildberries.Parsing;
 import wildberries.WBdata;
+import wildberries.typesOfOperations.TypeOfOperations;
 
 import static telegram.MyBot.setButtons;
 import static telegram.MyBot.SHOP;
@@ -13,13 +14,13 @@ public class Statistics {
     public static SendMessage setStatisticsApi(Update update) {
         String inputMessage = update.getMessage().getText().trim();
         SHOP.setStatisticsApi(inputMessage);
-        final String ordersToday = WBdata.getDataForTheDay(SHOP.getStatisticsApi(), "order");
+        final String ordersToday = WBdata.getDataForTheDay(SHOP.getStatisticsApi(), TypeOfOperations.ORDER);
 
         SendMessage outputMessage = new SendMessage();
         outputMessage.setChatId(SHOP.getChatId());
 
         try {
-            Parsing.dataToString(ordersToday, "order");
+            Parsing.dataToString(ordersToday, TypeOfOperations.ORDER);
 
             SHOP.setStatisticsApiMessage(false);
             outputMessage.setText("Отлично, можем приступать к работе! ✨");
@@ -32,12 +33,12 @@ public class Statistics {
         return outputMessage;
     }
 
-    public static SendMessage getTodayData(String typeOfData) {
+    public static SendMessage getTodayData(TypeOfOperations type) {
         final SendMessage outputMessage = new SendMessage();
-        final String ordersToday = WBdata.getDataForTheDay(SHOP.getStatisticsApi(), typeOfData);
+        final String ordersToday = WBdata.getDataForTheDay(SHOP.getStatisticsApi(), type);
 
         outputMessage.setChatId(SHOP.getChatId());
-        outputMessage.setText(Parsing.dataToString(ordersToday, typeOfData));
+        outputMessage.setText(Parsing.dataToString(ordersToday, type));
 
         return outputMessage;
     }

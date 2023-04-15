@@ -7,13 +7,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import wildberries.typesOfOperations.Order;
 import wildberries.typesOfOperations.Sale;
 import wildberries.typesOfOperations.StatisticsData;
+import wildberries.typesOfOperations.TypeOfOperations;
 
 public class Parsing {
 
     private static String reportMessage;
 
-    public static String dataToString(String data, String typeOfData) {
-        List<? extends StatisticsData> dataToFormat = parsingData(data, typeOfData);
+    public static String dataToString(String data, TypeOfOperations type) {
+        List<? extends StatisticsData> dataToFormat = parsingData(data, type);
         final StringBuilder builder = new StringBuilder();
         int counter = 1;
 
@@ -30,17 +31,17 @@ public class Parsing {
         return builder.substring(0, builder.length() - 2);
     }
 
-    private static List<? extends StatisticsData> parsingData(String data, String typeOfData) {
+    private static List<? extends StatisticsData> parsingData(String data, TypeOfOperations type) {
         final ObjectMapper mapper = new ObjectMapper();
         List<? extends StatisticsData> result = null;
 
         try {
 
-            if (typeOfData.equals("order")) {
+            if (type.equals(TypeOfOperations.ORDER)) {
                 result = mapper.readValue(data, new TypeReference<List<Order>>() {
                 });
                 reportMessage = "Заказ №";
-            } else if (typeOfData.equals("sale")) {
+            } else if (type.equals(TypeOfOperations.SALE)) {
                 result = mapper.readValue(data, new TypeReference<List<Sale>>() {
                 });
                 reportMessage = "Продажа №";
