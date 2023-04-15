@@ -14,17 +14,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyBot extends TelegramLongPollingBot {
-
+    private final String botUsername;
+    private final String botToken;
     public static final Shop SHOP = new Shop();
+
+    public MyBot(String botUsername, String botToken) {
+        this.botUsername = botUsername;
+        this.botToken = botToken;
+    }
 
     @Override
     public String getBotUsername() {
-        return "polezhaevTestBot";
+        return this.botUsername;
     }
 
     @Override
     public String getBotToken() {
-        return "5699977622:AAFVfx9eVU6_-1lHGD1DB0VGCbbjtDc1878";
+        return this.botToken;
     }
 
     @Override
