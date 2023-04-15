@@ -7,6 +7,8 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 public class Main {
     public static void main(String[] args) {
+        final String username = args[0];
+        final String token = args[1];
 
         TelegramBotsApi telegramBotsApi;
         try {
@@ -16,7 +18,7 @@ public class Main {
         }
 
         try {
-            MyBot bot = new MyBot(args[0], args[1]);
+            MyBot bot = new MyBot(username, token);
             telegramBotsApi.registerBot(bot);
 
         } catch (TelegramApiException e) {

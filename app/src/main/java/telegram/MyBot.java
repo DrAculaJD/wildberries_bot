@@ -1,6 +1,7 @@
 package telegram;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -97,12 +98,12 @@ public class MyBot extends TelegramLongPollingBot {
 
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline1 = new ArrayList<>();
-        List<InlineKeyboardButton> rowInline2 = new ArrayList<>();
+        //List<InlineKeyboardButton> rowInline2 = new ArrayList<>();
         rowInline1.add(ordersToday);
-        rowInline2.add(salesToday);
+        rowInline1.add(salesToday);
 
         rowsInline.add(rowInline1);
-        rowsInline.add(rowInline2);
+        //rowsInline.add(rowInline2);
         markupInline.setKeyboard(rowsInline);
 
         return markupInline;
@@ -126,7 +127,7 @@ public class MyBot extends TelegramLongPollingBot {
 
         outputMessage.setReplyMarkup(setButtons());
         outputMessage.setChatId(SHOP.getChatId());
-
+        outputMessage.setParseMode(ParseMode.HTML);
         sendMessage(outputMessage);
     }
 
