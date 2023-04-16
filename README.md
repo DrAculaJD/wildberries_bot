@@ -13,6 +13,8 @@
 ***
 ##  Обновление бота 04.04.2023
 Сегодня бот научился показывать продажи за текущий день!
+[Пример 1](https://drive.google.com/file/d/1-UXfUZ08bl0dmRag-YMxTwiXym2xXntu/view?usp=share_link)
+[Пример 2](https://drive.google.com/file/d/1kPQRtv5XnXDl4fYVQ05xiki-l27NMwbr/view?usp=share_link)
 ***
 ##  Первые результаты 03.04.2023
 Запустил бота на хостинге timeweb.cloud! Сейчас он умеет показывать заказы за текущий день.
