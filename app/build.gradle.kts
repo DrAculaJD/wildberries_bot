@@ -23,6 +23,8 @@ dependencies {
     implementation ("org.telegram:telegrambots:5.3.0")
     implementation ("org.telegram:telegrambots-meta:5.2.0")
     implementation ("org.slf4j:slf4j-simple:1.7.32")
+    implementation ("org.mariadb.jdbc:mariadb-java-client:2.1.2")
+    implementation ("org.postgresql:postgresql:42.6.0")
 }
 
 tasks.test {

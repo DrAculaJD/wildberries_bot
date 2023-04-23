@@ -15,6 +15,8 @@ import wildberries.typesOfOperations.TypeOfOperations;
 import java.util.ArrayList;
 import java.util.List;
 
+import static main.Main.USER_SQL;
+
 public class MyBot extends TelegramLongPollingBot {
     private final String botUsername;
     private final String botToken;
@@ -66,11 +68,12 @@ public class MyBot extends TelegramLongPollingBot {
     private void startAction(Update update) {
         SHOP.setStatisticsApiMessage(true);
         SHOP.setChatId(update.getMessage().getChatId().toString());
+        USER_SQL.setTelegramUser();
 
         SendMessage outputMessageFirst = new SendMessage();
         outputMessageFirst.setChatId(SHOP.getChatId());
-        outputMessageFirst.setText("❗ Сообщаем вам, что все данные, которые передаются в этом боте, не защищены, "
-                + "так как это открытый проект. \nМы не несем ответственность за сохранность этих данных. ❗");
+        outputMessageFirst.setText("❗❗❗ Сообщаем вам, что все данные, которые передаются в этом боте, не защищены, "
+                + "так как это открытый проект.\nМы не несем ответственность за сохранность этих данных.");
 
         SendMessage outputMessageNext = new SendMessage();
         outputMessageNext.setChatId(SHOP.getChatId());
