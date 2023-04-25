@@ -7,13 +7,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static telegram.MyBot.SHOP;
-
 public class UserSQL {
     private final String username;
     private final String password;
     private final String pathToDatabase;
     private String request;
+    private String actualStatApiKey;
 
     public UserSQL(String username, String password, String pathToDatabase) {
         this.username = username;
@@ -21,14 +20,14 @@ public class UserSQL {
         this.pathToDatabase = pathToDatabase;
     }
 
-    public void setTelegramUser() {
+    public void setTelegramUser(String chatId, String statisticsApiKey) {
 
         try (Connection connection = DriverManager.getConnection(pathToDatabase, username, password)) {
             request = "INSERT INTO users (statistics_api, chat_id) VALUES (?, ?)";
             Class.forName("org.postgresql.Driver");
 
             try  {
-                setUserToSql(connection);
+                setUserToSql(connection, chatId, statisticsApiKey);
             } catch (SQLException ex) {
                 System.out.println("Ошибка при работе с базой данных: " + ex.getMessage());
             }
@@ -41,16 +40,16 @@ public class UserSQL {
 
     }
 
-    private void setUserToSql(Connection connection) throws SQLException {
+    private void setUserToSql(Connection connection, String chatId, String statisticsApiKey) throws SQLException {
 
-        if (getChats()) {
+        if (baseContainsId(chatId)) {
             request = "UPDATE users SET statistics_api = ? WHERE chat_id = ?";
         }
 
         try (PreparedStatement statement = connection.prepareStatement(request)) {
 
-            statement.setString(1, SHOP.getStatisticsApi());
-            statement.setLong(2, Integer.parseInt(SHOP.getChatId()));
+            statement.setString(1, statisticsApiKey);
+            statement.setLong(2, Integer.parseInt(chatId));
 
             int rowsInserted = statement.executeUpdate();
 
@@ -62,7 +61,7 @@ public class UserSQL {
         }
     }
 
-    public boolean getChats() {
+    public boolean baseContainsId(String chatId) {
 
         boolean result = false;
 
@@ -74,13 +73,10 @@ public class UserSQL {
                 try (ResultSet resultSet = statement.executeQuery(request)) {
                     while (resultSet.next()) {
 
-                        if (String.valueOf(resultSet.getInt("chat_id")).equals(SHOP.getChatId())) {
+                        if (String.valueOf(resultSet.getInt("chat_id")).equals(chatId)) {
                             result = true;
+                            actualStatApiKey = resultSet.getString("statistics_api");
                         }
-
-//                        System.out.println(resultSet.getInt("chat_id"));
-//                        System.out.println(resultSet.getString("statistics_api"));
-//                        System.out.println();
                     }
                 }
 
@@ -91,5 +87,11 @@ public class UserSQL {
         }
 
         return result;
+    }
+
+    public String getStatisticsApi(String chatId) {
+        baseContainsId(chatId);
+
+        return actualStatApiKey;
     }
 }

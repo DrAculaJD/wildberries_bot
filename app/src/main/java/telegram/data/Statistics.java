@@ -6,38 +6,40 @@ import wildberries.Parsing;
 import wildberries.WBdata;
 import wildberries.typesOfOperations.TypeOfOperations;
 
-import static telegram.MyBot.setButtons;
-import static telegram.MyBot.SHOP;
+import static main.Main.USER_SQL;
 
 public class Statistics {
 
     public static SendMessage setStatisticsApi(Update update) {
-        String inputMessage = update.getMessage().getText().trim();
-        SHOP.setStatisticsApi(inputMessage);
-        final String ordersToday = WBdata.getDataForTheDay(SHOP.getStatisticsApi(), TypeOfOperations.ORDER);
+        final String statisticsApiKey = update.getMessage().getText().trim();
+        final String chatId = update.getMessage().getChatId().toString();
+
+        final String ordersToday = WBdata.getDataForTheDay(statisticsApiKey, TypeOfOperations.ORDER);
 
         SendMessage outputMessage = new SendMessage();
-        outputMessage.setChatId(SHOP.getChatId());
+        outputMessage.setChatId(chatId);
 
         try {
             Parsing.dataToString(ordersToday, TypeOfOperations.ORDER);
 
-            SHOP.setStatisticsApiMessage(false);
-            outputMessage.setText("Отлично, можем приступать к работе! ✨");
-            outputMessage.setReplyMarkup(setButtons());
+            USER_SQL.setTelegramUser(chatId, statisticsApiKey);
+
+            outputMessage.setText("Отлично, можем приступать к работе! ✨\nТеперь команды в меню работают.");
         } catch (Exception e) {
-            outputMessage.setText("К сожалению, этот ключ не работает, проверьте, правильно ли скопирован ключ "
+            outputMessage.setText("К сожалению, этот ключ не работает, проверьте, правильно ли он скопирован "
                     + "и попробуйте еще раз \uD83D\uDE80");
         }
 
         return outputMessage;
     }
 
-    public static SendMessage getTodayData(TypeOfOperations type) {
+    public static SendMessage getTodayData(String chatId, TypeOfOperations type) {
         final SendMessage outputMessage = new SendMessage();
-        final String ordersToday = WBdata.getDataForTheDay(SHOP.getStatisticsApi(), type);
+        final String statisticsApi = USER_SQL.getStatisticsApi(chatId);
 
-        outputMessage.setChatId(SHOP.getChatId());
+        final String ordersToday = WBdata.getDataForTheDay(statisticsApi, type);
+
+        outputMessage.setChatId(chatId);
         outputMessage.setText(Parsing.dataToString(ordersToday, type));
 
         return outputMessage;

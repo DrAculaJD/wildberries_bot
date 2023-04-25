@@ -20,11 +20,12 @@ dependencies {
     implementation ("com.fasterxml.jackson.core:jackson-core:2.15.0-rc2")
     implementation ("com.fasterxml.jackson.core:jackson-databind:2.12.7.1")
     implementation ("com.github.pengrad:java-telegram-bot-api:6.6.0")
-    implementation ("org.telegram:telegrambots:5.3.0")
-    implementation ("org.telegram:telegrambots-meta:5.2.0")
-    implementation ("org.slf4j:slf4j-simple:1.7.32")
+    implementation ("org.telegram:telegrambots:6.5.0")
+    implementation ("org.telegram:telegrambots-meta:6.5.0")
     implementation ("org.mariadb.jdbc:mariadb-java-client:2.1.2")
     implementation ("org.postgresql:postgresql:42.6.0")
+    implementation("org.slf4j:slf4j-api:2.0.7")
+    implementation("org.slf4j:slf4j-simple:2.0.7")
 }
 
 tasks.test {
