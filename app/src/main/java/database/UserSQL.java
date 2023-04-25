@@ -1,4 +1,4 @@
-package localDatabase;
+package database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -66,7 +66,7 @@ public class UserSQL {
         boolean result = false;
 
         try (Connection connection = DriverManager.getConnection(pathToDatabase, username, password)) {
-            final String request = "SELECT * FROM users";
+            request = "SELECT * FROM users";
 
             try (Statement statement = connection.createStatement()) {
 

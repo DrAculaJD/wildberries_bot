@@ -6,7 +6,7 @@ import wildberries.Parsing;
 import wildberries.WBdata;
 import wildberries.typesOfOperations.TypeOfOperations;
 
-import static main.Main.USER_SQL;
+import static main.Main.userSQL;
 
 public class Statistics {
 
@@ -22,7 +22,7 @@ public class Statistics {
         try {
             Parsing.dataToString(ordersToday, TypeOfOperations.ORDER);
 
-            USER_SQL.setTelegramUser(chatId, statisticsApiKey);
+            userSQL.setTelegramUser(chatId, statisticsApiKey);
 
             outputMessage.setText("Отлично, можем приступать к работе! ✨\nТеперь команды в меню работают.");
         } catch (Exception e) {
@@ -35,7 +35,7 @@ public class Statistics {
 
     public static SendMessage getTodayData(String chatId, TypeOfOperations type) {
         final SendMessage outputMessage = new SendMessage();
-        final String statisticsApi = USER_SQL.getStatisticsApi(chatId);
+        final String statisticsApi = userSQL.getStatisticsApi(chatId);
 
         final String ordersToday = WBdata.getDataForTheDay(statisticsApi, type);
 
