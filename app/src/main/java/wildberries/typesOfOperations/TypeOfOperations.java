@@ -2,5 +2,7 @@ package wildberries.typesOfOperations;
 
 public enum TypeOfOperations {
     ORDER,
-    SALE
+    SALE,
+    QUESTIONS,
+    FEEDBACKS
 }

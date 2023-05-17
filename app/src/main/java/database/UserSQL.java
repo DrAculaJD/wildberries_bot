@@ -1,5 +1,7 @@
 package database;
 
+import wildberries.TypeOfApi;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,6 +15,7 @@ public class UserSQL {
     private final String pathToDatabase;
     private String request;
     private String actualStatApiKey;
+    private String actualStandartApiKey;
 
     public UserSQL(String username, String password, String pathToDatabase) {
         this.username = username;
@@ -20,14 +23,14 @@ public class UserSQL {
         this.pathToDatabase = pathToDatabase;
     }
 
-    public void setTelegramUser(String chatId, String statisticsApiKey) {
+    public void setTelegramUser(String chatId, String apiKey, TypeOfApi typeOfApi) {
 
         try (Connection connection = DriverManager.getConnection(pathToDatabase, username, password)) {
             request = "INSERT INTO users (statistics_api, chat_id) VALUES (?, ?)";
             Class.forName("org.postgresql.Driver");
 
             try  {
-                setUserToSql(connection, chatId, statisticsApiKey);
+                setUserToSql(connection, chatId, apiKey, typeOfApi);
             } catch (SQLException ex) {
                 System.out.println("Ошибка при работе с базой данных: " + ex.getMessage());
             }
@@ -40,15 +43,16 @@ public class UserSQL {
 
     }
 
-    private void setUserToSql(Connection connection, String chatId, String statisticsApiKey) throws SQLException {
+    private void setUserToSql(Connection connection, String chatId, String apiKey,
+                              TypeOfApi typeOfApi) throws SQLException {
 
         if (baseContainsId(chatId)) {
-            request = "UPDATE users SET statistics_api = ? WHERE chat_id = ?";
+            selectRequest(typeOfApi);
         }
 
         try (PreparedStatement statement = connection.prepareStatement(request)) {
 
-            statement.setString(1, statisticsApiKey);
+            statement.setString(1, apiKey);
             statement.setLong(2, Integer.parseInt(chatId));
 
             int rowsInserted = statement.executeUpdate();
@@ -76,6 +80,7 @@ public class UserSQL {
                         if (String.valueOf(resultSet.getInt("chat_id")).equals(chatId)) {
                             result = true;
                             actualStatApiKey = resultSet.getString("statistics_api");
+                            actualStandartApiKey = resultSet.getString("standart_api");
                         }
                     }
                 }
@@ -93,5 +98,20 @@ public class UserSQL {
         baseContainsId(chatId);
 
         return actualStatApiKey;
+    }
+
+    public String getStandartApi(String chatId) {
+        baseContainsId(chatId);
+
+        return actualStandartApiKey;
+    }
+
+    private void selectRequest(TypeOfApi typeOfApi) {
+
+        if (typeOfApi.equals(TypeOfApi.STATISTICS_API)) {
+            request = "UPDATE users SET statistics_api = ? WHERE chat_id = ?";
+        } else if (typeOfApi.equals(TypeOfApi.STANDART_API)) {
+            request = "UPDATE users SET standart_api = ? WHERE chat_id = ?";
+        }
     }
 }

@@ -5,7 +5,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-import telegram.data.Statistics;
+import wildberries.TypeOfApi;
 import wildberries.typesOfOperations.TypeOfOperations;
 
 public class MyBot extends TelegramLongPollingBot {
@@ -34,9 +34,13 @@ public class MyBot extends TelegramLongPollingBot {
             startForNewUser(update);
 
             if (inputMessage.equals("/orders")) {
-                sendMessage(Statistics.getTodayData(chatId, TypeOfOperations.ORDER));
+                sendMessage(Data.getTodayData(chatId, TypeOfOperations.ORDER, TypeOfApi.STATISTICS_API));
             } else if (inputMessage.equals("/sales")) {
-                sendMessage(Statistics.getTodayData(chatId, TypeOfOperations.SALE));
+                sendMessage(Data.getTodayData(chatId, TypeOfOperations.SALE, TypeOfApi.STATISTICS_API));
+            } else if (inputMessage.equals("/questions")) {
+                sendMessage(Data.getTodayData(chatId, TypeOfOperations.QUESTIONS, TypeOfApi.STANDART_API));
+            } else if (inputMessage.equals("/feedbacks")) {
+                sendMessage(Data.getTodayData(chatId, TypeOfOperations.FEEDBACKS, TypeOfApi.STANDART_API));
             }
 
         }
@@ -44,13 +48,22 @@ public class MyBot extends TelegramLongPollingBot {
     }
 
     private void startForNewUser(Update update) {
-        String inputMessage = update.getMessage().getText();
+        String inputMessage = update.getMessage().getText().trim();
         final int apiLength = 149;
 
         if (inputMessage.equals("/start")) {
             startAction(update);
         } else if (inputMessage.length() == apiLength) {
-            sendMessage(Statistics.setStatisticsApi(update));
+            if (Data.isStatisticsKey(inputMessage, TypeOfOperations.SALE)) {
+
+                sendMessage(Data.setApiKey(update, TypeOfApi.STATISTICS_API));
+                sendMessage(getStandartApiKey(update));
+
+            } else if (Data.isStandartKey(inputMessage, TypeOfOperations.QUESTIONS)) {
+
+                sendMessage(Data.setApiKey(update, TypeOfApi.STANDART_API));
+
+            }
         }
     }
 
@@ -87,5 +100,14 @@ public class MyBot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             System.out.println("Message without text.");
         }
+    }
+
+    private SendMessage getStandartApiKey(Update update) {
+        SendMessage message = new SendMessage();
+
+        message.setChatId(update.getMessage().getChatId());
+        message.setText("Теперь, пожалуйста, введите ваш ключ API \"Стандартный\"");
+
+        return message;
     }
 }

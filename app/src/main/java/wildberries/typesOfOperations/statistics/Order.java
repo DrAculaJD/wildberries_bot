@@ -1,13 +1,14 @@
-package wildberries.typesOfOperations;
+package wildberries.typesOfOperations.statistics;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import wildberries.typesOfOperations.DataFromWildberries;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Order implements StatisticsData {
+public class Order implements DataFromWildberries {
     private String supplierArticle;
     private String date;
     private double totalPrice;

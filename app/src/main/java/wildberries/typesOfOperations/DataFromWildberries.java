@@ -1,5 +1,5 @@
 package wildberries.typesOfOperations;
 
-public interface StatisticsData {
+public interface DataFromWildberries {
     String toString();
 }
