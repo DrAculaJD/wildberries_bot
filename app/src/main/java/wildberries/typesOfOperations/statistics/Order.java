@@ -69,6 +69,6 @@ public class Order implements DataFromWildberries {
                 + "Стоимость: " + priceWithDiscount + " руб." + '\n'
                 + "Склад продажи: " + warehouseName + '\n'
                 + "Куда заказан: " + oblast + '\n'
-                + "Отменен: " + cancel + '\n';
+                + "Отменен: " + cancel;
     }
 }

@@ -15,8 +15,8 @@ public class UserSQL {
     private final String username;
     private final String password;
     private final String pathToDatabase;
-    private final String STATISTICS_MAP_KEY = "statisticsApi";
-    private final String STANDART_MAP_KEY = "standartApi";
+    private static final String STATISTICS_KEY = "statisticsApi";
+    private static final String STANDART_KEY = "standartApi";
 
     public UserSQL(String username, String password, String pathToDatabase) {
         this.username = username;
@@ -66,9 +66,9 @@ public class UserSQL {
 
         for (Map.Entry<String, Map<String, String>> map: getFromDatabase(chatId).entrySet()) {
             for (Map.Entry<String, String> key: map.getValue().entrySet()) {
-                if (key.getKey().equals(STATISTICS_MAP_KEY) && typeOfApi.equals(TypeOfApi.STATISTICS_API)) {
+                if (key.getKey().equals(STATISTICS_KEY) && typeOfApi.equals(TypeOfApi.STATISTICS_API)) {
                     result = key.getValue();
-                } else if (key.getKey().equals(STANDART_MAP_KEY) && typeOfApi.equals(TypeOfApi.STANDART_API)) {
+                } else if (key.getKey().equals(STANDART_KEY) && typeOfApi.equals(TypeOfApi.STANDART_API)) {
                     result = key.getValue();
                 }
             }
@@ -105,8 +105,8 @@ public class UserSQL {
 
                         if (String.valueOf(resultSet.getInt("chat_id")).equals(chatId)) {
 
-                            apiKeys.put(STATISTICS_MAP_KEY, resultSet.getString("statistics_api"));
-                            apiKeys.put(STANDART_MAP_KEY, resultSet.getString("standart_api"));
+                            apiKeys.put(STATISTICS_KEY, resultSet.getString("statistics_api"));
+                            apiKeys.put(STANDART_KEY, resultSet.getString("standart_api"));
                             result.put(chatId, apiKeys);
 
                         }
