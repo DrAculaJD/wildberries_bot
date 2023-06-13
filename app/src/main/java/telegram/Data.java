@@ -32,17 +32,9 @@ public class Data {
 
     public static SendMessage getTodayData(String chatId, TypeOfOperations typeOfOperations, TypeOfApi typeOfApi) {
         final SendMessage outputMessage = new SendMessage();
-        final String statisticsApi = userSQL.getStatisticsApi(chatId);
-        final String standartApi = userSQL.getStandartApi(chatId);
-        String currentApi;
+        final String api = userSQL.getApi(chatId, typeOfApi);
 
-        if (typeOfApi.equals(TypeOfApi.STANDART_API)) {
-            currentApi = standartApi;
-        } else {
-            currentApi = statisticsApi;
-        }
-
-        final String ordersToday = WBdata.getDataForTheDay(currentApi, typeOfOperations, typeOfApi);
+        final String ordersToday = WBdata.getDataForTheDay(api, typeOfOperations, typeOfApi);
 
         outputMessage.setChatId(chatId);
         outputMessage.setText(Parsing.dataToString(ordersToday, typeOfOperations));

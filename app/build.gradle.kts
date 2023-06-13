@@ -5,6 +5,10 @@ plugins {
     id("checkstyle")
 }
 
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
+
 group = "org.example"
 version = "1.0-SNAPSHOT"
 

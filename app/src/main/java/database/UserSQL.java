@@ -8,14 +8,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserSQL {
     private final String username;
     private final String password;
     private final String pathToDatabase;
-    private String request;
-    private String actualStatApiKey;
-    private String actualStandartApiKey;
+    private final String STATISTICS_MAP_KEY = "statisticsApi";
+    private final String STANDART_MAP_KEY = "standartApi";
 
     public UserSQL(String username, String password, String pathToDatabase) {
         this.username = username;
@@ -26,7 +27,6 @@ public class UserSQL {
     public void setTelegramUser(String chatId, String apiKey, TypeOfApi typeOfApi) {
 
         try (Connection connection = DriverManager.getConnection(pathToDatabase, username, password)) {
-            request = "INSERT INTO users (statistics_api, chat_id) VALUES (?, ?)";
             Class.forName("org.postgresql.Driver");
 
             try  {
@@ -46,11 +46,7 @@ public class UserSQL {
     private void setUserToSql(Connection connection, String chatId, String apiKey,
                               TypeOfApi typeOfApi) throws SQLException {
 
-        if (baseContainsId(chatId)) {
-            selectRequest(typeOfApi);
-        }
-
-        try (PreparedStatement statement = connection.prepareStatement(request)) {
+        try (PreparedStatement statement = connection.prepareStatement(selectRequest(typeOfApi))) {
 
             statement.setString(1, apiKey);
             statement.setLong(2, Integer.parseInt(chatId));
@@ -65,12 +61,42 @@ public class UserSQL {
         }
     }
 
-    public boolean baseContainsId(String chatId) {
+    public String getApi(String chatId, TypeOfApi typeOfApi) {
+        String result = "";
 
-        boolean result = false;
+        for (Map.Entry<String, Map<String, String>> map: getFromDatabase(chatId).entrySet()) {
+            for (Map.Entry<String, String> key: map.getValue().entrySet()) {
+                if (key.getKey().equals(STATISTICS_MAP_KEY) && typeOfApi.equals(TypeOfApi.STATISTICS_API)) {
+                    result = key.getValue();
+                } else if (key.getKey().equals(STANDART_MAP_KEY) && typeOfApi.equals(TypeOfApi.STANDART_API)) {
+                    result = key.getValue();
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private String selectRequest(TypeOfApi typeOfApi) {
+
+        String request = "INSERT INTO users (statistics_api, chat_id) VALUES (?, ?)";
+
+        if (typeOfApi.equals(TypeOfApi.STATISTICS_API)) {
+            request = "UPDATE users SET statistics_api = ? WHERE chat_id = ?";
+        } else if (typeOfApi.equals(TypeOfApi.STANDART_API)) {
+            request = "UPDATE users SET standart_api = ? WHERE chat_id = ?";
+        }
+
+        return request;
+    }
+
+    //метод для получения ключей АПИ (стандартный и статистика) из базы данных SQL
+    private Map<String, Map<String, String>> getFromDatabase(String chatId) {
+        Map<String, String> apiKeys = new HashMap<>();
+        Map<String, Map<String, String>> result = new HashMap<>();
 
         try (Connection connection = DriverManager.getConnection(pathToDatabase, username, password)) {
-            request = "SELECT * FROM users";
+            final String request = "SELECT * FROM users";
 
             try (Statement statement = connection.createStatement()) {
 
@@ -78,9 +104,11 @@ public class UserSQL {
                     while (resultSet.next()) {
 
                         if (String.valueOf(resultSet.getInt("chat_id")).equals(chatId)) {
-                            result = true;
-                            actualStatApiKey = resultSet.getString("statistics_api");
-                            actualStandartApiKey = resultSet.getString("standart_api");
+
+                            apiKeys.put(STATISTICS_MAP_KEY, resultSet.getString("statistics_api"));
+                            apiKeys.put(STANDART_MAP_KEY, resultSet.getString("standart_api"));
+                            result.put(chatId, apiKeys);
+
                         }
                     }
                 }
@@ -94,24 +122,4 @@ public class UserSQL {
         return result;
     }
 
-    public String getStatisticsApi(String chatId) {
-        baseContainsId(chatId);
-
-        return actualStatApiKey;
-    }
-
-    public String getStandartApi(String chatId) {
-        baseContainsId(chatId);
-
-        return actualStandartApiKey;
-    }
-
-    private void selectRequest(TypeOfApi typeOfApi) {
-
-        if (typeOfApi.equals(TypeOfApi.STATISTICS_API)) {
-            request = "UPDATE users SET statistics_api = ? WHERE chat_id = ?";
-        } else if (typeOfApi.equals(TypeOfApi.STANDART_API)) {
-            request = "UPDATE users SET standart_api = ? WHERE chat_id = ?";
-        }
-    }
 }
