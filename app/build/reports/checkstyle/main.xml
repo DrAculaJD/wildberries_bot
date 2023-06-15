@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="8.45.1">
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\database\UserSQL.java">
+</file>
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\main\Main.java">
+</file>
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\telegram\Answers.java">
+</file>
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\telegram\Data.java">
+</file>
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\telegram\MyBot.java">
+</file>
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\Parsing.java">
+</file>
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\TypeOfApi.java">
+</file>
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\DataFromWildberries.java">
+</file>
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\standart\answers\Answer.java">
+</file>
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\standart\answers\FeedbacksAnswer.java">
+</file>
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\standart\answers\QuestionsAnswer.java">
+</file>
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\standart\Feedback.java">
+</file>
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\standart\objectStructure\FeedbackData.java">
+</file>
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\standart\objectStructure\OneObject.java">
+</file>
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\standart\objectStructure\Product.java">
+</file>
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\standart\objectStructure\QuestionData.java">
+</file>
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\standart\Question.java">
+</file>
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\statistics\Order.java">
+</file>
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\statistics\Sale.java">
+</file>
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\TypeOfOperations.java">
+</file>
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\WBdata.java">
+</file>
+</checkstyle>
