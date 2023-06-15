@@ -20,16 +20,17 @@ public class OneObject {
     public static void setFirstObjectId(String chatId, String feedbackId, int counter,
                                         TypeOfOperations typeOfOperations) {
         Map<TypeOfOperations, String> firstFeedback = new HashMap<>();
-
         if (counter == 1) {
             firstFeedback.put(typeOfOperations, feedbackId);
+            //System.out.println(firstFeedback.get(TypeOfOperations.QUESTIONS));
+            //System.out.println(firstFeedback.get(TypeOfOperations.FEEDBACKS));
             firstObject.put(chatId, firstFeedback);
         }
     }
 
-    public static String getFirstObjectId (String chatId, TypeOfOperations typeOfOperations) {
+    public static String getFirstObjectId(String chatId, TypeOfOperations typeOfOperations) {
 
-            return firstObject.get(chatId).get(typeOfOperations);
+        return firstObject.get(chatId).get(typeOfOperations);
     }
 
     public String getId() {

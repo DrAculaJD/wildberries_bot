@@ -50,7 +50,7 @@ public class Order implements DataFromWildberries {
     }
 
     @Override
-    public String toString(String chatId){
+    public String toString(String chatId) {
         return null;
     }
     @Override

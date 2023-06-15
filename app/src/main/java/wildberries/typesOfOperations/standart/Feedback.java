@@ -18,7 +18,7 @@ public class Feedback implements DataFromWildberries {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Отзывов без ответа еще нет ⛔  ";
     }
 
@@ -32,7 +32,7 @@ public class Feedback implements DataFromWildberries {
         int counter = 1;
 
         for (OneObject feedback: data.getFeedbacks()) {
-            result.append("Отзыв №").append(counter).append("\n");
+            result.append("\uD83D\uDD14 Отзыв №").append(counter).append("\n");
             result.append(feedback.getCreatedDate());
             result.append(feedback.getProductDetails().toString());
             result.append(feedback.getProductValuation());

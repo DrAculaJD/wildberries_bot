@@ -44,24 +44,25 @@ public class MyBot extends TelegramLongPollingBot {
     }
 
     private void selectCommand(String inputMessage, String chatId) throws JsonProcessingException {
-        switch (inputMessage) {
-            case "/orders" ->
-                    sendMessage(Data.getTodayData(chatId, TypeOfOperations.ORDER, TypeOfApi.STATISTICS_API));
-            case "/sales" ->
-                    sendMessage(Data.getTodayData(chatId, TypeOfOperations.SALE, TypeOfApi.STATISTICS_API));
-            case "/questions" ->
-                    sendMessage(Data.getTodayData(chatId, TypeOfOperations.QUESTIONS, TypeOfApi.STANDART_API));
-            case "/feedbacks" ->
-                    sendMessage(Data.getTodayData(chatId, TypeOfOperations.FEEDBACKS, TypeOfApi.STANDART_API));
-            case "/feedbackAnswer" ->
-                    sendMessage(Answers.enterAnswerMessage(chatId, TypeOfOperations.FEEDBACKS, TypeOfApi.STANDART_API));
-            case "/questionAnswer" ->
-                    sendMessage(Answers.enterAnswerMessage(chatId, TypeOfOperations.QUESTIONS, TypeOfApi.STANDART_API));
-        }
 
         if (Answers.answerers.containsKey(chatId)) {
             sendMessage(Answers.sendAnswer(chatId, inputMessage));
         }
+
+        if ("/orders".equals(inputMessage)) {
+            sendMessage(Data.getTodayData(chatId, TypeOfOperations.ORDER, TypeOfApi.STATISTICS_API));
+        } else if ("/sales".equals(inputMessage)) {
+            sendMessage(Data.getTodayData(chatId, TypeOfOperations.SALE, TypeOfApi.STATISTICS_API));
+        } else if ("/questions".equals(inputMessage)) {
+            sendMessage(Data.getTodayData(chatId, TypeOfOperations.QUESTIONS, TypeOfApi.STANDART_API));
+        } else if ("/feedbacks".equals(inputMessage)) {
+            sendMessage(Data.getTodayData(chatId, TypeOfOperations.FEEDBACKS, TypeOfApi.STANDART_API));
+        } else if ("/feedbackAnswer".equals(inputMessage)) {
+            sendMessage(Answers.enterAnswerMessage(chatId, TypeOfOperations.FEEDBACKS, TypeOfApi.STANDART_API));
+        } else if ("/questionAnswer".equals(inputMessage)) {
+            sendMessage(Answers.enterAnswerMessage(chatId, TypeOfOperations.QUESTIONS, TypeOfApi.STANDART_API));
+        }
+
     }
 
     private void startForNewUser(Update update) {

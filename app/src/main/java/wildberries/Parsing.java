@@ -72,15 +72,16 @@ public class Parsing {
         try {
             // в зависимости от типа аргумента typeOfOperations выбирается класс,
             // согласно которому будут парситься данные
-            switch (typeOfOperations) {
-                case ORDER ->
-                        result = mapper.readValue(data, new TypeReference<List<Order>>() {});
-                case SALE ->
-                        result = mapper.readValue(data, new TypeReference<List<Sale>>() {});
-                case FEEDBACKS ->
-                        result = Collections.singletonList(mapper.readValue(data, Feedback.class));
-                case QUESTIONS ->
-                        result = Collections.singletonList(mapper.readValue(data, Question.class));
+            if (typeOfOperations == TypeOfOperations.ORDER) {
+                result = mapper.readValue(data, new TypeReference<List<Order>>() {
+                });
+            } else if (typeOfOperations == TypeOfOperations.SALE) {
+                result = mapper.readValue(data, new TypeReference<List<Sale>>() {
+                });
+            } else if (typeOfOperations == TypeOfOperations.FEEDBACKS) {
+                result = Collections.singletonList(mapper.readValue(data, Feedback.class));
+            } else if (typeOfOperations == TypeOfOperations.QUESTIONS) {
+                result = Collections.singletonList(mapper.readValue(data, Question.class));
             }
 
         } catch (JsonProcessingException e) {

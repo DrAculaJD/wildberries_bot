@@ -18,7 +18,7 @@ public class Question implements DataFromWildberries {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Вопросов без ответа еще нет ⛔  ";
     }
 
@@ -33,11 +33,12 @@ public class Question implements DataFromWildberries {
         int counter = 1;
 
         for (OneObject question: data.getQuestions()) {
-            result.append("Вопрос №").append(counter).append("\n");
+            result.append("❓ Вопрос №").append(counter).append("\n");
             result.append(question.getCreatedDate());
             result.append(question.getProductDetails().toString());
             result.append(question.getText());
             setFirstObjectId(chatId, question.getId(), counter++, TypeOfOperations.QUESTIONS);
+            //System.out.println(question.getId());
         }
 
         return result.toString();

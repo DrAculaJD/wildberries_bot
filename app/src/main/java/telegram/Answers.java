@@ -2,13 +2,20 @@ package telegram;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import okhttp3.*;
+import okhttp3.HttpUrl;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import wildberries.Parsing;
 import wildberries.TypeOfApi;
 import wildberries.WBdata;
 import wildberries.typesOfOperations.TypeOfOperations;
+import wildberries.typesOfOperations.standart.answers.Answer;
 import wildberries.typesOfOperations.standart.answers.FeedbacksAnswer;
+import wildberries.typesOfOperations.standart.answers.QuestionsAnswer;
 import wildberries.typesOfOperations.standart.objectStructure.OneObject;
 
 import java.util.HashMap;
@@ -47,13 +54,13 @@ public class Answers {
             outputMessage.setText(noDataMessage);
         } else {
             // сообщение с предложением пользователю ввести ответ на первый вопрос
-            final String firstMessage = "Вот список " + objectName + " без ответа:\n";
-            final String lastMessage = "\nВаше следующее сообщение будет отправлено как ответ " +
-                    "на первый из " + objectName + " \uD83D\uDC47";
+            final String firstMessage = "Вот список " + objectName + " без ответа:\n\n";
+            final String lastMessage = "\n\nВаше следующее сообщение будет отправлено как ответ "
+                    + "на первый из " + objectName + " \uD83D\uDC47";
             outputMessage.setText(firstMessage + formatData + lastMessage);
 
             // id чата пользователя добавляется в список answerers
-            answerers.put(chatId, TypeOfOperations.FEEDBACKS);
+            answerers.put(chatId, typeOfOperations);
         }
 
         outputMessage.setChatId(chatId);
@@ -67,6 +74,7 @@ public class Answers {
         outputMessage.setChatId(chatId);
 
         final TypeOfOperations typeOfOperations = answerers.get(chatId);
+        //System.out.println("typeOfOperations = " + typeOfOperations);
 
         // тело запроса в формате JSON
         final String jsonBody = getJsonBody(chatId, typeOfOperations, answersMessage);
@@ -80,6 +88,9 @@ public class Answers {
         //System.out.println(request);
 
         try (Response response = client.newCall(request).execute()) {
+            if (response.code() != 200) {
+                throw new RuntimeException();
+            }
             outputMessage.setText("Ответ успешно отправлен! \uD83D\uDE4C");
             answerers.remove(chatId);
         } catch (Exception e) {
@@ -91,16 +102,19 @@ public class Answers {
 
     private static String getJsonBody(String chatId, TypeOfOperations typeOfOperations, String answersMessage)
             throws JsonProcessingException {
-        final String objectId = OneObject.getFirstObjectId(chatId,typeOfOperations);
+        final String objectId = OneObject.getFirstObjectId(chatId, typeOfOperations);
+        //System.out.println("getJsonBodyID = " + objectId);
+        final ObjectMapper mapper = new ObjectMapper();
 
         if (typeOfOperations.equals(TypeOfOperations.FEEDBACKS)) {
             final FeedbacksAnswer answer = new FeedbacksAnswer(objectId, answersMessage);
-
-            final ObjectMapper mapper = new ObjectMapper();
             return mapper.writeValueAsString(answer);
         }
 
-        return null; // дописать логику для ответа на вопрос!!!
+        final Answer usersMessage = new Answer(answersMessage);
+        final QuestionsAnswer answer = new QuestionsAnswer(objectId, usersMessage);
+
+        return mapper.writeValueAsString(answer);
     }
 
     private static String getUrl(TypeOfOperations typeOfOperations) {
