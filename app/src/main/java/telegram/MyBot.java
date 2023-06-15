@@ -57,9 +57,9 @@ public class MyBot extends TelegramLongPollingBot {
             sendMessage(Data.getTodayData(chatId, TypeOfOperations.QUESTIONS, TypeOfApi.STANDART_API));
         } else if ("/feedbacks".equals(inputMessage)) {
             sendMessage(Data.getTodayData(chatId, TypeOfOperations.FEEDBACKS, TypeOfApi.STANDART_API));
-        } else if ("/feedbackAnswer".equals(inputMessage)) {
+        } else if ("/feedbackanswer".equals(inputMessage)) {
             sendMessage(Answers.enterAnswerMessage(chatId, TypeOfOperations.FEEDBACKS, TypeOfApi.STANDART_API));
-        } else if ("/questionAnswer".equals(inputMessage)) {
+        } else if ("/questionanswer".equals(inputMessage)) {
             sendMessage(Answers.enterAnswerMessage(chatId, TypeOfOperations.QUESTIONS, TypeOfApi.STANDART_API));
         }
 
