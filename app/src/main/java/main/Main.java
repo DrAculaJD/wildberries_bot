@@ -16,9 +16,10 @@ public class Main {
         final String sqlUsername = args[2];
         final String sqlPassword = args[3];
         final String sqlPath = args[4];
-
+        // объект userSQL создается для получения доступа к базе данных
         userSQL = new UserSQL(sqlUsername, sqlPassword, sqlPath);
 
+        // код ниже нужен для подключения к телеграм-боту
         TelegramBotsApi telegramBotsApi;
 
         try {

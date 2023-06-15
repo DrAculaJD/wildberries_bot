@@ -1,5 +1,6 @@
 package telegram;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -32,34 +33,51 @@ public class MyBot extends TelegramLongPollingBot {
 
         if (inputMessage != null) {
             startForNewUser(update);
-
-            if (inputMessage.equals("/orders")) {
-                sendMessage(Data.getTodayData(chatId, TypeOfOperations.ORDER, TypeOfApi.STATISTICS_API));
-            } else if (inputMessage.equals("/sales")) {
-                sendMessage(Data.getTodayData(chatId, TypeOfOperations.SALE, TypeOfApi.STATISTICS_API));
-            } else if (inputMessage.equals("/questions")) {
-                sendMessage(Data.getTodayData(chatId, TypeOfOperations.QUESTIONS, TypeOfApi.STANDART_API));
-            } else if (inputMessage.equals("/feedbacks")) {
-                sendMessage(Data.getTodayData(chatId, TypeOfOperations.FEEDBACKS, TypeOfApi.STANDART_API));
+            try {
+                selectCommand(inputMessage, chatId);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
             }
 
         }
 
     }
 
+    private void selectCommand(String inputMessage, String chatId) throws JsonProcessingException {
+        switch (inputMessage) {
+            case "/orders" ->
+                    sendMessage(Data.getTodayData(chatId, TypeOfOperations.ORDER, TypeOfApi.STATISTICS_API));
+            case "/sales" ->
+                    sendMessage(Data.getTodayData(chatId, TypeOfOperations.SALE, TypeOfApi.STATISTICS_API));
+            case "/questions" ->
+                    sendMessage(Data.getTodayData(chatId, TypeOfOperations.QUESTIONS, TypeOfApi.STANDART_API));
+            case "/feedbacks" ->
+                    sendMessage(Data.getTodayData(chatId, TypeOfOperations.FEEDBACKS, TypeOfApi.STANDART_API));
+            case "/feedbackAnswer" ->
+                    sendMessage(Answers.enterAnswerMessage(chatId, TypeOfOperations.FEEDBACKS, TypeOfApi.STANDART_API));
+            case "/questionAnswer" ->
+                    sendMessage(Answers.enterAnswerMessage(chatId, TypeOfOperations.QUESTIONS, TypeOfApi.STANDART_API));
+        }
+
+        if (Answers.answerers.containsKey(chatId)) {
+            sendMessage(Answers.sendAnswer(chatId, inputMessage));
+        }
+    }
+
     private void startForNewUser(Update update) {
-        String inputMessage = update.getMessage().getText().trim();
+        final String inputMessage = update.getMessage().getText().trim();
+        final String chatId = update.getMessage().getChatId().toString();
         final int apiLength = 149;
 
         if (inputMessage.equals("/start")) {
             startAction(update);
         } else if (inputMessage.length() == apiLength) {
-            if (Data.isStatisticsKey(inputMessage, TypeOfOperations.SALE)) {
+            if (Data.isStatisticsKey(chatId, inputMessage, TypeOfOperations.SALE)) {
 
                 sendMessage(Data.setApiKey(update, TypeOfApi.STATISTICS_API));
                 sendMessage(getStandartApiKey(update));
 
-            } else if (Data.isStandartKey(inputMessage, TypeOfOperations.QUESTIONS)) {
+            } else if (Data.isStandartKey(chatId, inputMessage, TypeOfOperations.QUESTIONS)) {
 
                 sendMessage(Data.setApiKey(update, TypeOfApi.STANDART_API));
 

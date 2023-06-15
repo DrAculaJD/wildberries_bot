@@ -24,7 +24,7 @@ public class DataFromWildberriesTest {
     public void ordersTest() {
         final String ordersToday = WBdata.getDataForTheDay(statisticsApi, TypeOfOperations.ORDER,
                 TypeOfApi.STATISTICS_API);
-        final String result = Parsing.dataToString(ordersToday, TypeOfOperations.ORDER);
+        final String result = Parsing.dataToString(chatId, ordersToday, TypeOfOperations.ORDER);
 
         System.out.println(ordersToday);
         System.out.println(result);
@@ -36,7 +36,7 @@ public class DataFromWildberriesTest {
                 TypeOfApi.STATISTICS_API);
         System.out.println(salesToday);
 
-        final String result = Parsing.dataToString(salesToday, TypeOfOperations.SALE);
+        final String result = Parsing.dataToString(chatId, salesToday, TypeOfOperations.SALE);
         System.out.println(result);
     }
 
@@ -46,7 +46,7 @@ public class DataFromWildberriesTest {
                 TypeOfApi.STANDART_API);
         System.out.println(salesToday);
 
-        final String result = Parsing.dataToString(salesToday, TypeOfOperations.QUESTIONS);
+        final String result = Parsing.dataToString(chatId, salesToday, TypeOfOperations.QUESTIONS);
         System.out.println(result);
     }
 
@@ -56,7 +56,7 @@ public class DataFromWildberriesTest {
                 TypeOfApi.STANDART_API);
         System.out.println(salesToday);
 
-        final String result = Parsing.dataToString(salesToday, TypeOfOperations.FEEDBACKS);
+        final String result = Parsing.dataToString(chatId, salesToday, TypeOfOperations.FEEDBACKS);
         System.out.println(result);
     }
 

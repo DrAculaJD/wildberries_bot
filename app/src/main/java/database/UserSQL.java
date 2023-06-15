@@ -61,6 +61,7 @@ public class UserSQL {
         }
     }
 
+    // метод для выбора и получения АПИ ключа, используется в классе telegram.Data
     public String getApi(String chatId, TypeOfApi typeOfApi) {
         String result = "";
 
@@ -77,20 +78,21 @@ public class UserSQL {
         return result;
     }
 
+    // метод для выбора запроса для выполнения разных действий с базой данных
     private String selectRequest(TypeOfApi typeOfApi) {
-
+        // запрос для добавления ключа "статистика" и id чата в БД при первом запуске бота
         String request = "INSERT INTO users (statistics_api, chat_id) VALUES (?, ?)";
 
         if (typeOfApi.equals(TypeOfApi.STATISTICS_API)) {
-            request = "UPDATE users SET statistics_api = ? WHERE chat_id = ?";
+            request = "UPDATE users SET statistics_api = ? WHERE chat_id = ?"; // обновление ключа "статистика" в бд
         } else if (typeOfApi.equals(TypeOfApi.STANDART_API)) {
-            request = "UPDATE users SET standart_api = ? WHERE chat_id = ?";
+            request = "UPDATE users SET standart_api = ? WHERE chat_id = ?"; // обновление ключа "стандартный" в бд
         }
 
         return request;
     }
 
-    //метод для получения ключей АПИ (стандартный и статистика) из базы данных SQL
+    //метод для получения ключей АПИ (стандартный и статистика) из базы данных SQL по id чата
     private Map<String, Map<String, String>> getFromDatabase(String chatId) {
         Map<String, String> apiKeys = new HashMap<>();
         Map<String, Map<String, String>> result = new HashMap<>();
@@ -99,10 +101,10 @@ public class UserSQL {
             final String request = "SELECT * FROM users";
 
             try (Statement statement = connection.createStatement()) {
-
+                // выбираем все записи в БД
                 try (ResultSet resultSet = statement.executeQuery(request)) {
                     while (resultSet.next()) {
-
+                        // если id чата соответсвует переданному в метод значению, сохраняем данные пользователяв map
                         if (String.valueOf(resultSet.getInt("chat_id")).equals(chatId)) {
 
                             apiKeys.put(STATISTICS_KEY, resultSet.getString("statistics_api"));
@@ -118,7 +120,7 @@ public class UserSQL {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
+        // возвращаются данные пользователя
         return result;
     }
 

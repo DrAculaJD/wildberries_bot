@@ -50,6 +50,10 @@ public class Order implements DataFromWildberries {
     }
 
     @Override
+    public String toString(String chatId){
+        return null;
+    }
+    @Override
     public String toString() {
         String cancel = "нет \uD83D\uDC4D\n";
 

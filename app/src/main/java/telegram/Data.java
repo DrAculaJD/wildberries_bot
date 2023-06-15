@@ -37,16 +37,16 @@ public class Data {
         final String ordersToday = WBdata.getDataForTheDay(api, typeOfOperations, typeOfApi);
 
         outputMessage.setChatId(chatId);
-        outputMessage.setText(Parsing.dataToString(ordersToday, typeOfOperations));
+        outputMessage.setText(Parsing.dataToString(chatId, ordersToday, typeOfOperations));
 
         return outputMessage;
     }
 
-    public static boolean isStatisticsKey(String apiKey, TypeOfOperations typeOfOperations) {
+    public static boolean isStatisticsKey(String chatId, String apiKey, TypeOfOperations typeOfOperations) {
 
         try {
             final String dataToday = WBdata.getDataForTheDay(apiKey, typeOfOperations, TypeOfApi.STATISTICS_API);
-            Parsing.dataToString(dataToday, typeOfOperations);
+            Parsing.dataToString(chatId, dataToday, typeOfOperations);
         } catch (Exception e) {
             return false;
         }
@@ -55,11 +55,11 @@ public class Data {
 
     }
 
-    public static boolean isStandartKey(String apiKey, TypeOfOperations typeOfOperations) {
+    public static boolean isStandartKey(String chatId, String apiKey, TypeOfOperations typeOfOperations) {
 
         try {
             final String dataToday = WBdata.getDataForTheDay(apiKey, typeOfOperations, TypeOfApi.STANDART_API);
-            Parsing.dataToString(dataToday, typeOfOperations);
+            Parsing.dataToString(chatId, dataToday, typeOfOperations);
         } catch (Exception e) {
             return false;
         }

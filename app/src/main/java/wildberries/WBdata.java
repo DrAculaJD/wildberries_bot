@@ -6,7 +6,8 @@ import okhttp3.Request;
 import okhttp3.Response;
 import wildberries.typesOfOperations.TypeOfOperations;
 
-import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
@@ -41,10 +42,10 @@ public class WBdata {
     }
 
     private static String getUrl(TypeOfOperations typeOfOperations, TypeOfApi typeOfApi) {
-        String request = setRequest(typeOfOperations, typeOfApi);
+        String request = getRequest(typeOfOperations, typeOfApi);
 
-
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(getPreUrl(typeOfApi) + request)).newBuilder();
+        HttpUrl.Builder urlBuilder =
+                Objects.requireNonNull(HttpUrl.parse(getPreUrl(typeOfApi) + request)).newBuilder();
 
         if (typeOfApi.equals(TypeOfApi.STANDART_API)) {
             urlBuilder.addQueryParameter("isAnswered", "false");
@@ -59,14 +60,17 @@ public class WBdata {
         return urlBuilder.build().toString();
     }
 
+    // метод для получения сегодняшней даты по Московскому часовому поясу
     private static String getDate() {
-        final LocalDate currentDate = LocalDate.now();
+        final ZoneId moscowZone = ZoneId.of("Europe/Moscow");
+        final ZonedDateTime currentDate = ZonedDateTime.now(moscowZone);
+
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         return currentDate.format(formatter);
     }
 
-    private static String setRequest(TypeOfOperations typeOfOperations, TypeOfApi typeOfApi) {
+    public static String getRequest(TypeOfOperations typeOfOperations, TypeOfApi typeOfApi) {
 
         if (typeOfApi.equals(TypeOfApi.STATISTICS_API)) {
             if (typeOfOperations.equals(TypeOfOperations.SALE)) {
@@ -83,7 +87,7 @@ public class WBdata {
         return FEEDBACKS_REQUEST;
     }
 
-    private static String getPreUrl(TypeOfApi typeOfApi) {
+    public static String getPreUrl(TypeOfApi typeOfApi) {
         if (typeOfApi.equals(TypeOfApi.STATISTICS_API)) {
             return PRE_URL_STATISTICS;
         }
