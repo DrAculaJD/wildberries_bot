@@ -10,6 +10,15 @@ public class Main {
 
     public static UserSQL userSQL;
 
+    /**
+     * Основной класс, создает объект класса UserSQL для работы с базой данных, и создает подключение к Telegram боту
+     * @param args принимает 5 значений в качестве аргументов при запуске программы:<br>
+     *             - имя пользователя Telegram бота<br>
+     *             - токен Telegram бота<br>
+     *             - имя пользователя базы PostgreSQL<br>
+     *             - пароль пользователя PostgreSQL<br>
+     *             - путь к базе PostgreSQL
+     */
     public static void main(String[] args) {
         final String username = args[0];
         final String token = args[1];

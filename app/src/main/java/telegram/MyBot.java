@@ -9,6 +9,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import wildberries.TypeOfApi;
 import wildberries.typesOfOperations.TypeOfOperations;
 
+/**
+ * Класс содержит логику взаимодествия бота с программой.
+ */
 public class MyBot extends TelegramLongPollingBot {
     private final String botUsername;
     private final String botToken;
@@ -43,31 +46,51 @@ public class MyBot extends TelegramLongPollingBot {
 
     }
 
+    /**
+     * Метод обрабатывает команды, которые пользователь отправляет в чат при помощи меню.
+     * @param inputMessage текст сообщения пользователя
+     * @param chatId ID Telegram чата пользователя
+     */
     private void selectCommand(String inputMessage, String chatId) throws JsonProcessingException {
 
+        // отправка ответа на вопрос/отзыв, если клиент ранее выбрал соответсвующую команду
         if (Answers.answerers.containsKey(chatId)) {
             sendMessage(Answers.sendAnswer(chatId, inputMessage));
         }
 
         if ("/orders".equals(inputMessage)) {
+            // отправка списка заказов
             sendMessage(Data.getTodayData(chatId, TypeOfOperations.ORDER, TypeOfApi.STATISTICS_API));
         } else if ("/sales".equals(inputMessage)) {
+            // отправка списка продаж
             sendMessage(Data.getTodayData(chatId, TypeOfOperations.SALE, TypeOfApi.STATISTICS_API));
         } else if ("/questions".equals(inputMessage)) {
+            // отправка списка отзывов, на которые нужно ответить
             sendMessage(Data.getTodayData(chatId, TypeOfOperations.QUESTIONS, TypeOfApi.STANDART_API));
         } else if ("/feedbacks".equals(inputMessage)) {
+            // отправка списка вопросов, на которые нужно ответить
             sendMessage(Data.getTodayData(chatId, TypeOfOperations.FEEDBACKS, TypeOfApi.STANDART_API));
         } else if ("/feedbackanswer".equals(inputMessage)) {
-            sendMessage(Answers.enterAnswerMessage(chatId, TypeOfOperations.FEEDBACKS, TypeOfApi.STANDART_API));
+            // отправка сообщения с предложением ввести ответ на первый отзыв
+            sendMessage(Answers.getFirstMessage(chatId, TypeOfOperations.FEEDBACKS, TypeOfApi.STANDART_API));
         } else if ("/questionanswer".equals(inputMessage)) {
-            sendMessage(Answers.enterAnswerMessage(chatId, TypeOfOperations.QUESTIONS, TypeOfApi.STANDART_API));
+            // отправка сообщения с предложением ввести ответ на первый вопрос
+            sendMessage(Answers.getFirstMessage(chatId, TypeOfOperations.QUESTIONS, TypeOfApi.STANDART_API));
         }
 
     }
 
+    /**
+     * Метод обрабатывает сообщение пользователя, если он впервые запустил бот или решил обновить API ключи в боте.
+     * @param update сообщение из чата, которое отправил пользователь
+     * @see org.telegram.telegrambots.meta.api.objects.Update
+     */
     private void startForNewUser(Update update) {
         final String inputMessage = update.getMessage().getText().trim();
         final String chatId = update.getMessage().getChatId().toString();
+
+        // длина API ключа, используется для его идентификации,
+        // так как совпадения иного сообщения по количеству символов маловероятно
         final int apiLength = 149;
 
         if (inputMessage.equals("/start")) {
@@ -86,6 +109,12 @@ public class MyBot extends TelegramLongPollingBot {
         }
     }
 
+    /**
+     * Метод обрабатывает команду <b>/start</b> от пользователя: выводит информацию о боте
+     * и предлагает пользователю ввести API ключ "Статистика"
+     * @param update сообщение из чата, которое отправил пользователь
+     * @see org.telegram.telegrambots.meta.api.objects.Update
+     */
     private void startAction(Update update) {
         final String chatId = update.getMessage().getChatId().toString();
 
@@ -107,11 +136,17 @@ public class MyBot extends TelegramLongPollingBot {
         try {
             execute(outputMessageFirst);
             execute(outputMessageNext);
+            execute(outputMessageThird);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Отправляет сообщение для пользователя в бот. Метод создан для сокращения дублированых частей в коде.
+     * @param message объект <b>SendMessage</b>, в котором содержится сообщение для пользователя
+     * @see org.telegram.telegrambots.meta.api.methods.send.SendMessage
+     */
     public void sendMessage(SendMessage message) {
 
         try {
@@ -121,6 +156,11 @@ public class MyBot extends TelegramLongPollingBot {
         }
     }
 
+    /**
+     * Формирует сообщение с просьбой пользователю ввести API ключ "Стандартный".
+     * @param update сообщение из чата, которое отправил пользователь
+     * @see org.telegram.telegrambots.meta.api.objects.Update
+     */
     private SendMessage getStandartApiKey(Update update) {
         SendMessage message = new SendMessage();
 

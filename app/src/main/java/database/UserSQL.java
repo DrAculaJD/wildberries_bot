@@ -11,6 +11,13 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Класс для взаимодействия с базой данных PostrgeSQL, конкретно служит для выполнения следующих действий:<br>
+ * - запись в БД данных новых пользователей<br>
+ * - обновление данных пользователей<br>
+ * - получение API ключей пользователей из БД<br><br>
+ */
+
 public class UserSQL {
     private final String username;
     private final String password;
@@ -24,6 +31,16 @@ public class UserSQL {
         this.pathToDatabase = pathToDatabase;
     }
 
+    /**
+     * Метод для добавления API ключей пользователя в базу данных PostrgeSQL. Его задача открыть соединение с БД
+     * и передать данные пользователя в следующий метод, который определит тип запроса к БД и отправит этот запрос.
+     * <br> Метод запускается при желании пользователя начать использовать бот или при необходимости
+     * обновить API ключи.
+     * @param chatId ID Telegram чата пользователя
+     * @param apiKey API ключ, который требуется добавить в БД
+     * @param typeOfApi тип API ключа, который требуется добавить в БД
+     * @see wildberries.TypeOfApi
+     */
     public void setTelegramUser(String chatId, String apiKey, TypeOfApi typeOfApi) {
 
         try (Connection connection = DriverManager.getConnection(pathToDatabase, username, password)) {
@@ -43,6 +60,16 @@ public class UserSQL {
 
     }
 
+    /**
+     * Метод, который добавляет данные пользователя в БД в зависимости от того есть ли уже в ней данные
+     * этого пользователя.
+     * Если это новый пользователь, то будет отправлен запрос на добавление данных, если пользователь
+     * уже пользовался ботом ранее, то запись будет обновлена.
+     * @param connection соединение с базой данных
+     * @param chatId ID Telegram чата пользователя
+     * @param apiKey API ключ, который требуется добавить в БД
+     * @param typeOfApi тип API ключа, который требуется добавить в БД
+     */
     private void setUserToSql(Connection connection, String chatId, String apiKey,
                               TypeOfApi typeOfApi) throws SQLException {
 
@@ -61,7 +88,13 @@ public class UserSQL {
         }
     }
 
-    // метод для выбора и получения АПИ ключа, используется в классе telegram.Data
+    /**
+     * Метод для выбора и получения API ключа.
+     * @param chatId ID Telegram чата пользователя
+     * @param typeOfApi тип API ключа, который требуется добавить в БД
+     * @return Возвращает значение API ключа, тип переменной <b>String</b>
+     */
+
     public String getApi(String chatId, TypeOfApi typeOfApi) {
         String result = "";
 
@@ -78,8 +111,8 @@ public class UserSQL {
         return result;
     }
 
-    /** Метод для выбора запроса для выполнения разных действий с базой данных
-     * @return Возвращает один из запросов типа String:<br>
+    /** Метод выбора запроса для выполнения разных действий с базой данных.
+     * @return Возвращает один из запросов типа <b>String</b>:<br>
      * - запрос для добавления ключа "статистика" и id чата в БД при первом запуске бота;<br>
      * - обновление ключа "статистика" в БД<br>
      * - обновление ключа "стандартный" в БД
@@ -103,7 +136,15 @@ public class UserSQL {
         return request;
     }
 
-    /** Метод для получения ключей АПИ (стандартный и статистика) из базы данных SQL по id чата */
+    /**
+     * Метод для получения API ключей (стандартный и статистика) из базы данных SQL по ID Telegram чата.
+     * @param chatId ID Telegram чата пользователя
+     * @return Возвращается объект Map, в котором хранится ID Telegram чата пользователя
+     * в качестве ключа типа <b>String</b>. В качестве соответсвующего ключу значения
+     * хранится <b>Map</b><<b>String, String</b>>, где:<br>
+     * key - тип ключа <br>
+     * value - значение ключа
+     */
     private Map<String, Map<String, String>> getFromDatabase(String chatId) {
         Map<String, String> apiKeys = new HashMap<>();
         Map<String, Map<String, String>> result = new HashMap<>();

@@ -2,6 +2,10 @@ package wildberries.typesOfOperations.standart.answers;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+/**
+ * Класс представляет объект, структура которого соответсвует телу запроса, в котором отправляется ответ на отзыв.
+ * Класс создан для парсинга тела запроса в формат JSON, который требуется для отправки на сервер Wildberries.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class QuestionsAnswer {
 
