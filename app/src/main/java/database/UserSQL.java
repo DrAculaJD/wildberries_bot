@@ -46,7 +46,7 @@ public class UserSQL {
     private void setUserToSql(Connection connection, String chatId, String apiKey,
                               TypeOfApi typeOfApi) throws SQLException {
 
-        try (PreparedStatement statement = connection.prepareStatement(selectRequest(typeOfApi))) {
+        try (PreparedStatement statement = connection.prepareStatement(selectRequest(typeOfApi, chatId))) {
 
             statement.setString(1, apiKey);
             statement.setLong(2, Integer.parseInt(chatId));
@@ -78,10 +78,21 @@ public class UserSQL {
         return result;
     }
 
-    // метод для выбора запроса для выполнения разных действий с базой данных
-    private String selectRequest(TypeOfApi typeOfApi) {
+    /** Метод для выбора запроса для выполнения разных действий с базой данных
+     * @return Возвращает один из запросов типа String:<br>
+     * - запрос для добавления ключа "статистика" и id чата в БД при первом запуске бота;<br>
+     * - обновление ключа "статистика" в БД<br>
+     * - обновление ключа "стандартный" в БД
+     * @param typeOfApi тип API ключа, который требуется добавить в БД
+     * @param chatId ID Telegram чата пользователя
+     */
+    private String selectRequest(TypeOfApi typeOfApi, String chatId) {
         // запрос для добавления ключа "статистика" и id чата в БД при первом запуске бота
         String request = "INSERT INTO users (statistics_api, chat_id) VALUES (?, ?)";
+
+        if (getFromDatabase(chatId).isEmpty()) {
+            return request;
+        }
 
         if (typeOfApi.equals(TypeOfApi.STATISTICS_API)) {
             request = "UPDATE users SET statistics_api = ? WHERE chat_id = ?"; // обновление ключа "статистика" в бд
@@ -92,7 +103,7 @@ public class UserSQL {
         return request;
     }
 
-    //метод для получения ключей АПИ (стандартный и статистика) из базы данных SQL по id чата
+    /** Метод для получения ключей АПИ (стандартный и статистика) из базы данных SQL по id чата */
     private Map<String, Map<String, String>> getFromDatabase(String chatId) {
         Map<String, String> apiKeys = new HashMap<>();
         Map<String, Map<String, String>> result = new HashMap<>();
