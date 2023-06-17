@@ -73,10 +73,12 @@ public class Data {
     }
 
     /**
-     * Метод проверяет, соответсвует ли тип переданного API ключа типу "Статистика"
+     * Метод проверяет, соответсвует ли тип переданного API ключа типу "Статистика".
      * @param chatId ID Telegram чата пользователя
      * @param apiKey API ключ, который ввел пользователь
      * @param typeOfOperations тип объекта, с которым работает метод
+     * @return <b>true</b> - если тип переданного API ключа соответсвует типу "Статистика"<br>
+     * <b>false</b> - если тип переданного API ключа не соответсвует типу "Статистика"
      * @see wildberries.typesOfOperations.TypeOfOperations
      */
     public static boolean isStatisticsKey(String chatId, String apiKey, TypeOfOperations typeOfOperations) {
@@ -93,10 +95,12 @@ public class Data {
     }
 
     /**
-     * Метод проверяет, соответсвует ли тип переданного API ключа типу "Стандартный"
+     * Метод проверяет, соответсвует ли тип переданного API ключа типу "Стандартный".
      * @param chatId ID Telegram чата пользователя
      * @param apiKey API ключ, который ввел пользователь
      * @param typeOfOperations тип объекта, с которым работает метод
+     * @return <b>true</b> - если тип переданного API ключа соответсвует типу "Стандартный"<br>
+     * <b>false</b> - если тип переданного API ключа не соответсвует типу "Стандартный"
      * @see wildberries.typesOfOperations.TypeOfOperations
      */
     public static boolean isStandartKey(String chatId, String apiKey, TypeOfOperations typeOfOperations) {

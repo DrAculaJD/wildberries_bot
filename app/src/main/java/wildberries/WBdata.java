@@ -12,21 +12,21 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
- * Содержит методы для получения данных с сервера Wildberries
+ * Содержит методы для получения данных с сервера Wildberries.
  */
 public class WBdata {
 
-    /** Вторая часть URL для запроса продаж  */
+    /** Вторая часть URL для запроса продаж.  */
     private static final String SALES_REQUEST = "/sales";
-    /** Вторая часть URL для запроса заказов  */
+    /** Вторая часть URL для запроса заказов.  */
     private static final String ORDERS_REQUEST = "/orders";
-    /** Вторая часть URL для запроса отзывов  */
+    /** Вторая часть URL для запроса отзывов.  */
     private static final String FEEDBACKS_REQUEST = "/feedbacks";
-    /** Вторая часть URL для запроса вопросов  */
+    /** Вторая часть URL для запроса вопросов.  */
     private static final String QUESTIONS_REQUEST = "/questions";
-    /** Первая часть URL для запроса продаж/заказов  */
+    /** Первая часть URL для запроса продаж/заказов.  */
     private static final String PRE_URL_STATISTICS = "https://statistics-api.wildberries.ru/api/v1/supplier";
-    /** Первая часть URL для запроса отзывов/вопросов  */
+    /** Первая часть URL для запроса отзывов/вопросов.  */
     private static final String PRE_URL_STANDART = "https://feedbacks-api.wb.ru/api/v1";
 
     /**
@@ -91,7 +91,10 @@ public class WBdata {
      * Выбирает первую чать URL запроса на сервер Wildberries, котроая зависит от того,
      * какие данные будут запрашиваться.
      * @param typeOfApi тип API ключа, который требуется добавить в БД
+     * @return PRE_URL_STATISTICS или PRE_URL_STANDART
      * @see wildberries.TypeOfApi
+     * @see WBdata#PRE_URL_STATISTICS
+     * @see WBdata#PRE_URL_STANDART
      */
     public static String getHalfUrl(TypeOfApi typeOfApi) {
         if (typeOfApi.equals(TypeOfApi.STATISTICS_API)) {
@@ -106,8 +109,17 @@ public class WBdata {
      * какие данные будут запрашиваться.
      * @param typeOfOperations тип объекта, с которым работает метод
      * @param typeOfApi тип API ключа, который требуется добавить в БД
+     * @return Одну из следующих переменных:<br>
+     * SALES_REQUEST<br>
+     * ORDERS_REQUEST<br>
+     * QUESTIONS_REQUEST<br>
+     * FEEDBACKS_REQUEST
      * @see wildberries.TypeOfApi
      * @see wildberries.typesOfOperations.TypeOfOperations
+     * @see WBdata#SALES_REQUEST
+     * @see WBdata#ORDERS_REQUEST
+     * @see WBdata#QUESTIONS_REQUEST
+     * @see WBdata#FEEDBACKS_REQUEST
      */
     public static String getRequest(TypeOfOperations typeOfOperations, TypeOfApi typeOfApi) {
 
@@ -130,6 +142,7 @@ public class WBdata {
      * Метод для получения текущей даты по Московскому часовому поясу в формате "yyyy-MM-dd",
      * который требутся для запроса сгласно API Wildberries. Так как сервер может находиться
      * не в Московском часовом поясе необходимо его указать.
+     * @return Текущую дату по Московскому часовому поясу в формате "yyyy-MM-dd"
      */
     private static String getDate() {
         final ZoneId moscowZone = ZoneId.of("Europe/Moscow");

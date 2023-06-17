@@ -43,6 +43,7 @@ public class OneObject {
      * Метод для получения ID вопроса/отзыва из объекта <b>OneObject.firstObject</b>.
      * @param chatId ID Telegram чата пользователя
      * @param typeOfOperations тип объекта, с которым работает метод (вопрос или ответ)
+     * @return ID вопроса/отзыва из объекта <b>OneObject.firstObject</b>
      * @see OneObject#firstObject
      */
     public static String getFirstObjectId(String chatId, TypeOfOperations typeOfOperations) {

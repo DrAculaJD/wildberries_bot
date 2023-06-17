@@ -114,8 +114,9 @@ public class Parsing {
     }
 
     /**
-     * Метод возвращает наименование данных для их форматирования в методе <b>ordersOrSalesToString</b>
+     * Метод выбирает наименование данных для их форматирования в методе <b>ordersOrSalesToString</b>.
      * @param typeOfOperations вид данных, с которыми работает метод
+     * @return наименование данных для их форматирования в методе <b>ordersOrSalesToString</b>.
      * @see wildberries.typesOfOperations.TypeOfOperations
      */
     private static String getNameOfOperation(TypeOfOperations typeOfOperations) {

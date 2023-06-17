@@ -55,7 +55,7 @@ public class Order implements DataFromWildberries {
 
     /**
      * В этом классе в таком методе нет необходимости, поэтому он существует только потому,
-     * что такова структура интерфейса DataFromWildberries
+     * что такова структура интерфейса DataFromWildberries.
      * @return null
      */
     @Override

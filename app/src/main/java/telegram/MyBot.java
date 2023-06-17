@@ -110,7 +110,7 @@ public class MyBot extends TelegramLongPollingBot {
     }
 
     /**
-     * Метод обрабатывает команду <b>/start</b> от пользователя: выводит информацию о боте
+     * Метод обрабатывает команду <b>/start</b> от пользователя: выводит информацию о боте.
      * и предлагает пользователю ввести API ключ "Статистика"
      * @param update сообщение из чата, которое отправил пользователь
      * @see org.telegram.telegrambots.meta.api.objects.Update
@@ -159,6 +159,7 @@ public class MyBot extends TelegramLongPollingBot {
     /**
      * Формирует сообщение с просьбой пользователю ввести API ключ "Стандартный".
      * @param update сообщение из чата, которое отправил пользователь
+     * @return Cообщение с просьбой пользователю ввести API ключ "Стандартный"
      * @see org.telegram.telegrambots.meta.api.objects.Update
      */
     private SendMessage getStandartApiKey(Update update) {

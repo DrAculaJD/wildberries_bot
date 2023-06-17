@@ -4,12 +4,12 @@ package wildberries.typesOfOperations;
  * Перечисление всех видов даных, с которыми работают классы программы.
  */
 public enum TypeOfOperations {
-    /** Заказы */
+    /** Заказы. */
     ORDER,
-    /** Продажи */
+    /** Продажи. */
     SALE,
-    /** Вопросы */
+    /** Вопросы. */
     QUESTIONS,
-    /** Отзывы */
+    /** Отзывы. */
     FEEDBACKS
 }
