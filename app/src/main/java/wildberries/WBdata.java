@@ -11,15 +11,34 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
+/**
+ * Содержит методы для получения данных с сервера Wildberries
+ */
 public class WBdata {
 
+    /** Вторая часть URL для запроса продаж  */
     private static final String SALES_REQUEST = "/sales";
+    /** Вторая часть URL для запроса заказов  */
     private static final String ORDERS_REQUEST = "/orders";
+    /** Вторая часть URL для запроса отзывов  */
     private static final String FEEDBACKS_REQUEST = "/feedbacks";
+    /** Вторая часть URL для запроса вопросов  */
     private static final String QUESTIONS_REQUEST = "/questions";
+    /** Первая часть URL для запроса продаж/заказов  */
     private static final String PRE_URL_STATISTICS = "https://statistics-api.wildberries.ru/api/v1/supplier";
+    /** Первая часть URL для запроса отзывов/вопросов  */
     private static final String PRE_URL_STANDART = "https://feedbacks-api.wb.ru/api/v1";
 
+    /**
+     * Получает данные с сервера Wildberries в формате JSON. Какие данные будут получены
+     * зависит от переданных параметров.
+     * @param apiKey API ключ пользователя
+     * @param typeOfOperations тип объекта, с которым работает метод
+     * @param typeOfApi тип API ключа, который требуется добавить в БД
+     * @return данные в формате JSON
+     * @see wildberries.TypeOfApi
+     * @see wildberries.typesOfOperations.TypeOfOperations
+     */
     public static String getDataForTheDay(String apiKey, TypeOfOperations typeOfOperations, TypeOfApi typeOfApi) {
         String result;
 
@@ -41,11 +60,19 @@ public class WBdata {
         return result;
     }
 
+    /**
+     * Формирует URL для запроса на сервер Wildberries. Параметры запроса зависят от переданных в метод аргументов.
+     * @param typeOfOperations тип объекта, с которым работает метод
+     * @param typeOfApi тип API ключа, который требуется добавить в БД
+     * @return URL запроса на сервер Wildberries
+     * @see wildberries.TypeOfApi
+     * @see wildberries.typesOfOperations.TypeOfOperations
+     */
     private static String getUrl(TypeOfOperations typeOfOperations, TypeOfApi typeOfApi) {
         String request = getRequest(typeOfOperations, typeOfApi);
 
         HttpUrl.Builder urlBuilder =
-                Objects.requireNonNull(HttpUrl.parse(getPreUrl(typeOfApi) + request)).newBuilder();
+                Objects.requireNonNull(HttpUrl.parse(getHalfUrl(typeOfApi) + request)).newBuilder();
 
         if (typeOfApi.equals(TypeOfApi.STANDART_API)) {
             urlBuilder.addQueryParameter("isAnswered", "false");
@@ -60,16 +87,28 @@ public class WBdata {
         return urlBuilder.build().toString();
     }
 
-    // метод для получения сегодняшней даты по Московскому часовому поясу
-    private static String getDate() {
-        final ZoneId moscowZone = ZoneId.of("Europe/Moscow");
-        final ZonedDateTime currentDate = ZonedDateTime.now(moscowZone);
+    /**
+     * Выбирает первую чать URL запроса на сервер Wildberries, котроая зависит от того,
+     * какие данные будут запрашиваться.
+     * @param typeOfApi тип API ключа, который требуется добавить в БД
+     * @see wildberries.TypeOfApi
+     */
+    public static String getHalfUrl(TypeOfApi typeOfApi) {
+        if (typeOfApi.equals(TypeOfApi.STATISTICS_API)) {
+            return PRE_URL_STATISTICS;
+        }
 
-        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        return currentDate.format(formatter);
+        return PRE_URL_STANDART;
     }
 
+    /**
+     * Возвращает втору часть URL для запроса на сервер Wildberries, котроая зависит от того,
+     * какие данные будут запрашиваться.
+     * @param typeOfOperations тип объекта, с которым работает метод
+     * @param typeOfApi тип API ключа, который требуется добавить в БД
+     * @see wildberries.TypeOfApi
+     * @see wildberries.typesOfOperations.TypeOfOperations
+     */
     public static String getRequest(TypeOfOperations typeOfOperations, TypeOfApi typeOfApi) {
 
         if (typeOfApi.equals(TypeOfApi.STATISTICS_API)) {
@@ -87,11 +126,16 @@ public class WBdata {
         return FEEDBACKS_REQUEST;
     }
 
-    public static String getPreUrl(TypeOfApi typeOfApi) {
-        if (typeOfApi.equals(TypeOfApi.STATISTICS_API)) {
-            return PRE_URL_STATISTICS;
-        }
+    /**
+     * Метод для получения текущей даты по Московскому часовому поясу в формате "yyyy-MM-dd",
+     * который требутся для запроса сгласно API Wildberries. Так как сервер может находиться
+     * не в Московском часовом поясе необходимо его указать.
+     */
+    private static String getDate() {
+        final ZoneId moscowZone = ZoneId.of("Europe/Moscow");
+        final ZonedDateTime currentDate = ZonedDateTime.now(moscowZone);
+        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        return PRE_URL_STANDART;
+        return currentDate.format(formatter);
     }
 }

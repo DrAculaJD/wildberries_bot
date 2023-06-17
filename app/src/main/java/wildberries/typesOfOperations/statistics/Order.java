@@ -7,6 +7,10 @@ import wildberries.typesOfOperations.DataFromWildberries;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+/**
+ * Класс представляет собой структуру данных которые возвращаются при отправке запроса
+ * к серверу Wildberries на получение заказов за текущий день.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Order implements DataFromWildberries {
     private String supplierArticle;
@@ -49,14 +53,26 @@ public class Order implements DataFromWildberries {
         isCancel = cancel;
     }
 
+    /**
+     * В этом классе в таком методе нет необходимости, поэтому он существует только потому,
+     * что такова структура интерфейса DataFromWildberries
+     * @return null
+     */
     @Override
     public String toString(String chatId) {
         return null;
     }
+
+    /**
+     * Метод форматирует одну запись о заказе.
+     */
     @Override
     public String toString() {
+        // переменная хранит данные о том был ли отменен заказ и далее меняет свое значение
+        // в зависимости от значения переменной isCancel
         String cancel = "нет \uD83D\uDC4D\n";
 
+        // расчет и округление суммы, которую поставщик получит за заказ
         double priceWithDiscount = totalPrice * (1 - (double) discountPercent / 100);
         BigDecimal bd = new BigDecimal(priceWithDiscount);
         bd = bd.setScale(2, RoundingMode.HALF_UP);
@@ -66,7 +82,7 @@ public class Order implements DataFromWildberries {
             cancel = "да ❌";
         }
 
-        return "Время заказа: " + date.substring(0, 10) + " " + date.substring(11) + '\n'
+        return "Дата заказа: " + date.substring(0, 10) + " " + date.substring(11) + '\n'
                 + "Бренд: " + brand + '\n'
                 + "Тип товара: " + subject + '\n'
                 + "Артикул продавца: " + supplierArticle + '\n'

@@ -3,6 +3,10 @@ package wildberries.typesOfOperations.standart.objectStructure;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 
+/**
+ * Класс представляет собой структуру объекта <b>data</b> который возвращается при отправке запроса
+ * к серверу Wildberries на получение вопросов.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class QuestionData {
     private List<OneObject> questions;

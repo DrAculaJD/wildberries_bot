@@ -6,9 +6,13 @@ import wildberries.typesOfOperations.TypeOfOperations;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Класс представляет собой структуру данных которые возвращаются при отправке запроса
+ * к серверу Wildberries на получение отзывов/вопросов.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OneObject {
-    // Map для храрнения id отзывов и вопросов, на которые можно написать ответ
+    /** Map для храрнения ID отзывов и вопросов, на которые можно написать ответ. */
     public static Map<String, Map<TypeOfOperations, String>> firstObject = new HashMap<>();
     private String text;
     private String id;
@@ -16,7 +20,14 @@ public class OneObject {
     private int productValuation;
     private Product productDetails;
 
-    // метод для добавления id первого отзыва или вопроса из списка в OneObject.firstObject
+    /**
+     * Метод для добавления ID первого из списка доступных для овета отзывов/вопросов в <b>OneObject.firstObject</b>.
+     * @param chatId ID Telegram чата пользователя
+     * @param feedbackId ID отзыва/вопроса
+     * @param counter значение счетчива вопросов/отзывов без ответа
+     * @param typeOfOperations тип объекта, с которым работает метод (вопрос или ответ)
+     * @see wildberries.typesOfOperations.TypeOfOperations
+     */
     public static void setFirstObjectId(String chatId, String feedbackId, int counter,
                                         TypeOfOperations typeOfOperations) {
         Map<TypeOfOperations, String> firstFeedback = new HashMap<>();
@@ -28,6 +39,12 @@ public class OneObject {
         }
     }
 
+    /**
+     * Метод для получения ID вопроса/отзыва из объекта <b>OneObject.firstObject</b>.
+     * @param chatId ID Telegram чата пользователя
+     * @param typeOfOperations тип объекта, с которым работает метод (вопрос или ответ)
+     * @see OneObject#firstObject
+     */
     public static String getFirstObjectId(String chatId, TypeOfOperations typeOfOperations) {
 
         return firstObject.get(chatId).get(typeOfOperations);

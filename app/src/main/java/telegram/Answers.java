@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static main.Main.userSQL;
-import static wildberries.WBdata.getPreUrl;
+import static wildberries.WBdata.getHalfUrl;
 import static wildberries.WBdata.getRequest;
 
 /**
@@ -171,7 +171,7 @@ public class Answers {
         String request = getRequest(typeOfOperations, TypeOfApi.STANDART_API);
 
         HttpUrl.Builder urlBuilder =
-                Objects.requireNonNull(HttpUrl.parse(getPreUrl(TypeOfApi.STANDART_API)
+                Objects.requireNonNull(HttpUrl.parse(getHalfUrl(TypeOfApi.STANDART_API)
                         + request)).newBuilder();
 
         return urlBuilder.build().toString();
