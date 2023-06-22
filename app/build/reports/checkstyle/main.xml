@@ -10,35 +10,37 @@
 </file>
 <file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\telegram\MyBot.java">
 </file>
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\JsonToExcelConverter.java">
+</file>
 <file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\Parsing.java">
 </file>
 <file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\TypeOfApi.java">
 </file>
-<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\DataFromWildberries.java">
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typeOfOperations\DataFromWildberries.java">
 </file>
-<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\standart\answers\Answer.java">
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typeOfOperations\standart\answers\Answer.java">
 </file>
-<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\standart\answers\FeedbacksAnswer.java">
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typeOfOperations\standart\answers\FeedbacksAnswer.java">
 </file>
-<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\standart\answers\QuestionsAnswer.java">
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typeOfOperations\standart\answers\QuestionsAnswer.java">
 </file>
-<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\standart\Feedback.java">
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typeOfOperations\standart\Feedback.java">
 </file>
-<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\standart\objectStructure\FeedbackData.java">
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typeOfOperations\standart\objectStructure\FeedbackData.java">
 </file>
-<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\standart\objectStructure\OneObject.java">
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typeOfOperations\standart\objectStructure\OneObject.java">
 </file>
-<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\standart\objectStructure\Product.java">
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typeOfOperations\standart\objectStructure\Product.java">
 </file>
-<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\standart\objectStructure\QuestionData.java">
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typeOfOperations\standart\objectStructure\QuestionData.java">
 </file>
-<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\standart\Question.java">
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typeOfOperations\standart\Question.java">
 </file>
-<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\statistics\Order.java">
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typeOfOperations\statistics\Order.java">
 </file>
-<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\statistics\Sale.java">
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typeOfOperations\statistics\Sale.java">
 </file>
-<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typesOfOperations\TypeOfOperations.java">
+<file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\typeOfOperations\TypeOfOperations.java">
 </file>
 <file name="C:\Users\DrAcula\IdeaProjects\wildberries_bot\app\src\main\java\wildberries\WBdata.java">
 </file>
