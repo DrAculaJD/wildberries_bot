@@ -1,4 +1,4 @@
-package wildberries.typesOfOperations.standart.objectStructure;
+package wildberries.typeOfOperations.standart.objectStructure;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

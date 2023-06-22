@@ -1,3 +1,2 @@
-v{"data":{"countUnanswered":0,"countArchive":118,"feedbacks":[]},"error":false,"errorText":"","additionalErrors":null}
-
-4Отзывов без ответа еще нет ?
+�Request{method=GET, url=https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=2023-01-01&flag=0, headers=[Authorization:??]}
+BНажмите на файл, чтобы скачать его ?

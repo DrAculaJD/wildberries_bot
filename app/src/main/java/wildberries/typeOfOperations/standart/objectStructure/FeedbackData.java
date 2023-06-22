@@ -1,30 +1,30 @@
-package wildberries.typesOfOperations.standart.objectStructure;
+package wildberries.typeOfOperations.standart.objectStructure;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 
 /**
  * Класс представляет собой структуру объекта <b>data</b> который возвращается при отправке запроса
- * к серверу Wildberries на получение вопросов.
+ * к серверу Wildberries на получение отзывов.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class QuestionData {
-    private List<OneObject> questions;
+public class FeedbackData {
+    private List<OneObject> feedbacks;
     private int countUnanswered;
 
-    public int getCountUnanswered() {
-        return countUnanswered;
+    public void setFeedbacks(List<OneObject> feedbacks) {
+        this.feedbacks = feedbacks;
     }
 
     public void setCountUnanswered(int countUnanswered) {
         this.countUnanswered = countUnanswered;
     }
 
-    public void setQuestions(List<OneObject> questions) {
-        this.questions = questions;
+    public int getCountUnanswered() {
+        return countUnanswered;
     }
 
-    public List<OneObject> getQuestions() {
-        return questions;
+    public List<OneObject> getFeedbacks() {
+        return feedbacks;
     }
 }

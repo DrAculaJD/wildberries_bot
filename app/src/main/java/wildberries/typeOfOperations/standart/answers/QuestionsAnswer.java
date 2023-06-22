@@ -1,4 +1,4 @@
-package wildberries.typesOfOperations.standart.answers;
+package wildberries.typeOfOperations.standart.answers;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

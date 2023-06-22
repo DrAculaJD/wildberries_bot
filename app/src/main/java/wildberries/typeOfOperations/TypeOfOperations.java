@@ -1,4 +1,4 @@
-package wildberries.typesOfOperations;
+package wildberries.typeOfOperations;
 
 /**
  * Перечисление всех видов даных, с которыми работают классы программы.

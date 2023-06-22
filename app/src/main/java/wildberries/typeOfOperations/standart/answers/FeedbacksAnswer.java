@@ -1,4 +1,4 @@
-package wildberries.typesOfOperations.standart.answers;
+package wildberries.typeOfOperations.standart.answers;
 
 /**
  * Класс представляет объект, в котором хранится ответ

@@ -1,11 +1,20 @@
 package telegram;
 
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import wildberries.JsonToExcelConverter;
 import wildberries.Parsing;
 import wildberries.TypeOfApi;
 import wildberries.WBdata;
-import wildberries.typesOfOperations.TypeOfOperations;
+import wildberries.typeOfOperations.TypeOfOperations;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static main.Main.userSQL;
 
@@ -57,19 +66,91 @@ public class Data {
      * @param typeOfApi тип API ключа, который требуется добавить в БД
      * @return объект <b>SendMessage</b>, который содержит сообщение для пользователя
      * @see wildberries.TypeOfApi
-     * @see wildberries.typesOfOperations.TypeOfOperations
+     * @see wildberries.typeOfOperations.TypeOfOperations
      * @see org.telegram.telegrambots.meta.api.methods.send.SendMessage
      */
     public static SendMessage getTodayData(String chatId, TypeOfOperations typeOfOperations, TypeOfApi typeOfApi) {
         final SendMessage outputMessage = new SendMessage();
         final String api = userSQL.getApi(chatId, typeOfApi);
 
-        final String ordersToday = WBdata.getDataForTheDay(api, typeOfOperations, typeOfApi);
+        final String ordersToday = WBdata.getData(api, typeOfOperations, typeOfApi, false);
 
         outputMessage.setChatId(chatId);
         outputMessage.setText(Parsing.dataToString(chatId, ordersToday, typeOfOperations));
 
         return outputMessage;
+    }
+
+    /**
+     * Подготавливает данные с сервера Wildberries с начала года для их отправки в чат пользователю.
+     * @param chatId ID Telegram чата пользователя
+     * @param typeOfOperations тип объекта, с которым работает метод
+     * @return объект типа <b>SendDocument</b> в котором хранится Excel файл для отправки пользователю
+     * @see wildberries.typeOfOperations.TypeOfOperations
+     * @see org.telegram.telegrambots.meta.api.methods.send.SendDocument
+     */
+    public static SendDocument getDataForSeveralMonths(String chatId,
+                                                       TypeOfOperations typeOfOperations) {
+        try {
+            // получение API ключа для отправки запроса на сервер
+            final String api = userSQL.getApi(chatId, TypeOfApi.STATISTICS_API);
+            final String data = WBdata.getData(api, typeOfOperations, TypeOfApi.STATISTICS_API, true);
+            // создается объект с Excel файлом для его передачи в sendDocument
+            final File file = new File(JsonToExcelConverter.createExcel(chatId, data, typeOfOperations));
+
+            // file передается в понятный для пакета org.telegram.telegrambots объект InputFile
+            final InputFile inputFile = new InputFile(file);
+            // создается объект SendDocument для передачи Excel файла в чат с пользователем бота
+            final SendDocument sendDocument = new SendDocument();
+            sendDocument.setChatId(chatId);
+            sendDocument.setDocument(inputFile);
+            return sendDocument;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Удаляет созданный да диске Excel файл, чтобы не засорять систему.
+     * @param chatId ID Telegram чата пользователя
+     * @param typeOfOperations тип объекта, с которым работает метод
+     * @return объект <b>SendMessage</b> в котором хранится сообщения для пользователя
+     * об успешной или неуспешной отправке файла
+     * @see wildberries.typeOfOperations.TypeOfOperations
+     * @see org.telegram.telegrambots.meta.api.methods.send.SendDocument
+     */
+    public static SendMessage deleteExcel(String chatId, TypeOfOperations typeOfOperations) {
+        // инициализируется уникально имя файла, который будет удален, оно состоит из шести первых символов
+        // ID чата пользователя и наименования типа данных в файле (продажи или заказы)
+        final String fileName;
+        if (typeOfOperations.equals(TypeOfOperations.ORDER)) {
+            fileName = chatId.substring(0, 6) + "_orders";
+        } else {
+            fileName = chatId.substring(0, 6) + "_sales";
+        }
+
+        // инициализируется переменная для хранения пути к файлу
+        final Path path = Paths.get(fileName + ".xlsx");
+
+        final SendMessage outputMessage = new SendMessage();
+        outputMessage.setChatId(chatId);
+
+        try {
+            // осуществляется попытка удалить файл, если файла не оказалось по указанному пути,
+            // то пользователю отправляется сообщение об ошибке
+            if (Files.deleteIfExists(path)) {
+                outputMessage.setText("Нажмите на файл, чтобы скачать его ☝");
+            } else {
+                outputMessage.setText("Не удалось сформировать файл, попробуйте позже еще раз \uD83E\uDD14");
+            }
+
+            return outputMessage;
+        } catch (IOException e) {
+            // если возникла ошибка при удалении файла, то пользователю отправляется сообщение об ошибке
+            outputMessage.setText("Не удалось сформировать файл, попробуйте позже еще раз \uD83E\uDD14");
+            throw new RuntimeException(e);
+        }
+
     }
 
     /**
@@ -79,12 +160,12 @@ public class Data {
      * @param typeOfOperations тип объекта, с которым работает метод
      * @return <b>true</b> - если тип переданного API ключа соответсвует типу "Статистика"<br>
      * <b>false</b> - если тип переданного API ключа не соответсвует типу "Статистика"
-     * @see wildberries.typesOfOperations.TypeOfOperations
+     * @see wildberries.typeOfOperations.TypeOfOperations
      */
     public static boolean isStatisticsKey(String chatId, String apiKey, TypeOfOperations typeOfOperations) {
 
         try {
-            final String dataToday = WBdata.getDataForTheDay(apiKey, typeOfOperations, TypeOfApi.STATISTICS_API);
+            final String dataToday = WBdata.getData(apiKey, typeOfOperations, TypeOfApi.STATISTICS_API, false);
             Parsing.dataToString(chatId, dataToday, typeOfOperations);
         } catch (Exception e) {
             return false;
@@ -101,12 +182,12 @@ public class Data {
      * @param typeOfOperations тип объекта, с которым работает метод
      * @return <b>true</b> - если тип переданного API ключа соответсвует типу "Стандартный"<br>
      * <b>false</b> - если тип переданного API ключа не соответсвует типу "Стандартный"
-     * @see wildberries.typesOfOperations.TypeOfOperations
+     * @see wildberries.typeOfOperations.TypeOfOperations
      */
     public static boolean isStandartKey(String chatId, String apiKey, TypeOfOperations typeOfOperations) {
 
         try {
-            final String dataToday = WBdata.getDataForTheDay(apiKey, typeOfOperations, TypeOfApi.STANDART_API);
+            final String dataToday = WBdata.getData(apiKey, typeOfOperations, TypeOfApi.STANDART_API, false);
             Parsing.dataToString(chatId, dataToday, typeOfOperations);
         } catch (Exception e) {
             return false;

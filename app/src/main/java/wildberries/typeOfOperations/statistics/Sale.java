@@ -1,7 +1,7 @@
-package wildberries.typesOfOperations.statistics;
+package wildberries.typeOfOperations.statistics;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import wildberries.typesOfOperations.DataFromWildberries;
+import wildberries.typeOfOperations.DataFromWildberries;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -18,7 +18,15 @@ public class Sale implements DataFromWildberries {
     private String subject;
     private int forPay;
     private String brand;
+    private String barcode;
+    private int nmId;
 
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+    public void setNmId(int nmId) {
+        this.nmId = nmId;
+    }
     public void setSubject(String subject) {
         this.subject = subject;
     }
@@ -55,7 +63,7 @@ public class Sale implements DataFromWildberries {
     public String toString() {
 
         // переменная хранит данные о том был ли возврат товара и далее меняет свое значение
-        // в зависимости от значения переменной isCancel
+        // в зависимости от значения переменной saleID
         String cancel = "нет \uD83D\uDC4D\n";
         if (saleID.contains("R")) {
             cancel = "да ❌";

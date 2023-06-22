@@ -1,12 +1,12 @@
-package wildberries.typesOfOperations.standart;
+package wildberries.typeOfOperations.standart;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import wildberries.typesOfOperations.DataFromWildberries;
-import wildberries.typesOfOperations.TypeOfOperations;
-import wildberries.typesOfOperations.standart.objectStructure.FeedbackData;
-import wildberries.typesOfOperations.standart.objectStructure.OneObject;
+import wildberries.typeOfOperations.DataFromWildberries;
+import wildberries.typeOfOperations.TypeOfOperations;
+import wildberries.typeOfOperations.standart.objectStructure.FeedbackData;
+import wildberries.typeOfOperations.standart.objectStructure.OneObject;
 
-import static wildberries.typesOfOperations.standart.objectStructure.OneObject.setFirstObjectId;
+import static wildberries.typeOfOperations.standart.objectStructure.OneObject.setFirstObjectId;
 
 /**
  * Класс представляет собой структуру данных которые возвращаются при отправке запроса

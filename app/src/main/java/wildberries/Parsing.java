@@ -6,12 +6,12 @@ import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import wildberries.typesOfOperations.standart.Feedback;
-import wildberries.typesOfOperations.standart.Question;
-import wildberries.typesOfOperations.statistics.Order;
-import wildberries.typesOfOperations.statistics.Sale;
-import wildberries.typesOfOperations.DataFromWildberries;
-import wildberries.typesOfOperations.TypeOfOperations;
+import wildberries.typeOfOperations.standart.Feedback;
+import wildberries.typeOfOperations.standart.Question;
+import wildberries.typeOfOperations.statistics.Order;
+import wildberries.typeOfOperations.statistics.Sale;
+import wildberries.typeOfOperations.DataFromWildberries;
+import wildberries.typeOfOperations.TypeOfOperations;
 
 /**
  * Класс содержит методы для парсинга и форматирования данных, которые поступают от Wildberries.
@@ -24,7 +24,7 @@ public class Parsing {
      * @param data данные для форматирования
      * @param typeOfOperations вид данных, с которыми работает метод
      * @return отформатированные данные
-     * @see wildberries.typesOfOperations.TypeOfOperations
+     * @see wildberries.typeOfOperations.TypeOfOperations
      */
     public static String dataToString(String chatId, String data, TypeOfOperations typeOfOperations) {
         // парсинг данных из json в List объектов интерфейса DataFromWildberries
@@ -56,7 +56,7 @@ public class Parsing {
      * @param dataToFormat список данных для форматирования
      * @param typeOfOperations вид данных, с которыми работает метод
      * @return отформатированные данные
-     * @see wildberries.typesOfOperations.TypeOfOperations
+     * @see wildberries.typeOfOperations.TypeOfOperations
      */
     private static String ordersOrSalesToString(List<? extends DataFromWildberries> dataToFormat,
                                                 TypeOfOperations typeOfOperations) {
@@ -85,8 +85,8 @@ public class Parsing {
      * @param data данные для парсинга
      * @param typeOfOperations вид данных, с которыми работает метод
      * @return список объектов интерфейса <b>DataFromWildberries</b>
-     * @see wildberries.typesOfOperations.TypeOfOperations
-     * @see wildberries.typesOfOperations.DataFromWildberries
+     * @see wildberries.typeOfOperations.TypeOfOperations
+     * @see wildberries.typeOfOperations.DataFromWildberries
      */
     private static List<? extends DataFromWildberries> parsingData(String data, TypeOfOperations typeOfOperations) {
         final ObjectMapper mapper = new ObjectMapper();
@@ -117,7 +117,7 @@ public class Parsing {
      * Метод выбирает наименование данных для их форматирования в методе <b>ordersOrSalesToString</b>.
      * @param typeOfOperations вид данных, с которыми работает метод
      * @return наименование данных для их форматирования в методе <b>ordersOrSalesToString</b>.
-     * @see wildberries.typesOfOperations.TypeOfOperations
+     * @see wildberries.typeOfOperations.TypeOfOperations
      */
     private static String getNameOfOperation(TypeOfOperations typeOfOperations) {
         if (typeOfOperations.equals(TypeOfOperations.ORDER)) {

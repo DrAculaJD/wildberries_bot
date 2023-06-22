@@ -1,13 +1,13 @@
 package telegram;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import wildberries.TypeOfApi;
-import wildberries.typesOfOperations.TypeOfOperations;
+import wildberries.typeOfOperations.TypeOfOperations;
 
 /**
  * Класс содержит логику взаимодествия бота с программой.
@@ -38,10 +38,9 @@ public class MyBot extends TelegramLongPollingBot {
             startForNewUser(update);
             try {
                 selectCommand(inputMessage, chatId);
-            } catch (JsonProcessingException e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-
         }
 
     }
@@ -51,7 +50,8 @@ public class MyBot extends TelegramLongPollingBot {
      * @param inputMessage текст сообщения пользователя
      * @param chatId ID Telegram чата пользователя
      */
-    private void selectCommand(String inputMessage, String chatId) throws JsonProcessingException {
+    private void selectCommand(String inputMessage, String chatId) throws Exception {
+
 
         // отправка ответа на вопрос/отзыв, если клиент ранее выбрал соответсвующую команду
         if (Answers.answerers.containsKey(chatId)) {
@@ -70,12 +70,18 @@ public class MyBot extends TelegramLongPollingBot {
         } else if ("/feedbacks".equals(inputMessage)) {
             // отправка списка вопросов, на которые нужно ответить
             sendMessage(Data.getTodayData(chatId, TypeOfOperations.FEEDBACKS, TypeOfApi.STANDART_API));
-        } else if ("/feedbackanswer".equals(inputMessage)) {
+        } else if ("/feedback_answer".equals(inputMessage)) {
             // отправка сообщения с предложением ввести ответ на первый отзыв
             sendMessage(Answers.getFirstMessage(chatId, TypeOfOperations.FEEDBACKS, TypeOfApi.STANDART_API));
-        } else if ("/questionanswer".equals(inputMessage)) {
+        } else if ("/question_answer".equals(inputMessage)) {
             // отправка сообщения с предложением ввести ответ на первый вопрос
             sendMessage(Answers.getFirstMessage(chatId, TypeOfOperations.QUESTIONS, TypeOfApi.STANDART_API));
+        } else if ("/more_orders".equals(inputMessage)) {
+            sendDocument(Data.getDataForSeveralMonths(chatId, TypeOfOperations.ORDER));
+            sendMessage(Data.deleteExcel(chatId, TypeOfOperations.ORDER));
+        } else if ("/more_sales".equals(inputMessage)) {
+            sendDocument(Data.getDataForSeveralMonths(chatId, TypeOfOperations.SALE));
+            sendMessage(Data.deleteExcel(chatId, TypeOfOperations.SALE));
         }
 
     }
@@ -153,6 +159,15 @@ public class MyBot extends TelegramLongPollingBot {
             execute(message);
         } catch (TelegramApiException e) {
             System.out.println("Message without text.");
+        }
+    }
+
+    public void sendDocument(SendDocument document) {
+
+        try {
+            execute(document);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
         }
     }
 

@@ -1,8 +1,8 @@
-package wildberries.typesOfOperations.statistics;
+package wildberries.typeOfOperations.statistics;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import wildberries.typesOfOperations.DataFromWildberries;
+import wildberries.typeOfOperations.DataFromWildberries;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -21,9 +21,17 @@ public class Order implements DataFromWildberries {
     private String warehouseName;
     private String oblast;
     private String brand;
+    private String barcode;
+    private int nmId;
     @JsonProperty("isCancel")
     private boolean isCancel;
 
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+    public void setNmId(int nmId) {
+        this.nmId = nmId;
+    }
     public void setSubject(String subject) {
         this.subject = subject;
     }

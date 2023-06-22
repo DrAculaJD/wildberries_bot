@@ -1,7 +1,7 @@
-package wildberries.typesOfOperations.standart.objectStructure;
+package wildberries.typeOfOperations.standart.objectStructure;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import wildberries.typesOfOperations.TypeOfOperations;
+import wildberries.typeOfOperations.TypeOfOperations;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +26,7 @@ public class OneObject {
      * @param feedbackId ID отзыва/вопроса
      * @param counter значение счетчива вопросов/отзывов без ответа
      * @param typeOfOperations тип объекта, с которым работает метод (вопрос или ответ)
-     * @see wildberries.typesOfOperations.TypeOfOperations
+     * @see wildberries.typeOfOperations.TypeOfOperations
      */
     public static void setFirstObjectId(String chatId, String feedbackId, int counter,
                                         TypeOfOperations typeOfOperations) {

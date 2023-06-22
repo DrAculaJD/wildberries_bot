@@ -12,11 +12,11 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import wildberries.Parsing;
 import wildberries.TypeOfApi;
 import wildberries.WBdata;
-import wildberries.typesOfOperations.TypeOfOperations;
-import wildberries.typesOfOperations.standart.answers.Answer;
-import wildberries.typesOfOperations.standart.answers.FeedbacksAnswer;
-import wildberries.typesOfOperations.standart.answers.QuestionsAnswer;
-import wildberries.typesOfOperations.standart.objectStructure.OneObject;
+import wildberries.typeOfOperations.TypeOfOperations;
+import wildberries.typeOfOperations.standart.answers.Answer;
+import wildberries.typeOfOperations.standart.answers.FeedbacksAnswer;
+import wildberries.typeOfOperations.standart.answers.QuestionsAnswer;
+import wildberries.typeOfOperations.standart.objectStructure.OneObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +44,7 @@ public class Answers {
      * @param typeOfApi тип API ключа, который требуется добавить в БД
      * @return объект <b>SendMessage</b>, который содержит сообщение для пользователя
      * @see wildberries.TypeOfApi
-     * @see wildberries.typesOfOperations.TypeOfOperations
+     * @see wildberries.typeOfOperations.TypeOfOperations
      * @see org.telegram.telegrambots.meta.api.methods.send.SendMessage
      */
     public static SendMessage getFirstMessage(String chatId, TypeOfOperations typeOfOperations,
@@ -54,7 +54,7 @@ public class Answers {
         final String api = userSQL.getApi(chatId, typeOfApi);
 
         // получение и форматирование списка вопросов/отзывов
-        final String dataForTheDay = WBdata.getDataForTheDay(api, typeOfOperations, typeOfApi);
+        final String dataForTheDay = WBdata.getData(api, typeOfOperations, typeOfApi, false);
         final String formatData = Parsing.dataToString(chatId, dataForTheDay, typeOfOperations);
 
         // инициализация переменной, которая будет обозначать вопрос/отзыв в сообщении
@@ -138,7 +138,7 @@ public class Answers {
      * @param typeOfOperations тип объекта, с которым работает метод (вопрос или ответ)
      * @param answersMessage сообщение пользователя, которое он ввел в качестве ответа
      * @return тело запроса в формате JSON
-     * @see wildberries.typesOfOperations.TypeOfOperations
+     * @see wildberries.typeOfOperations.TypeOfOperations
      */
     private static String getJsonBody(String chatId, TypeOfOperations typeOfOperations, String answersMessage)
             throws JsonProcessingException {
@@ -165,7 +165,7 @@ public class Answers {
      * Формирует URL по которому будет осуществляться запрос к Wildberries для отправки ответа на отзыв/вопрос.
      * @param typeOfOperations тип объекта, с которым работает метод (вопрос или ответ)
      * @return URL для Wildberries API
-     * @see wildberries.typesOfOperations.TypeOfOperations
+     * @see wildberries.typeOfOperations.TypeOfOperations
      */
     private static String getUrl(TypeOfOperations typeOfOperations) {
         String request = getRequest(typeOfOperations, TypeOfApi.STANDART_API);
@@ -181,7 +181,7 @@ public class Answers {
      * Метод для выбора переменной, которая будет обозначать вопрос/отзыв в сообщениях для пользователя.
      * @param typeOfOperations тип объекта, с которым работает метод (вопрос или ответ)
      * @return поле NAME_OF_QUESTIONS или NAME_OF_FEEDBACKS
-     * @see wildberries.typesOfOperations.TypeOfOperations
+     * @see wildberries.typeOfOperations.TypeOfOperations
      */
     private static String getNameOfObject(TypeOfOperations typeOfOperations) {
         if (typeOfOperations.equals(TypeOfOperations.QUESTIONS)) {

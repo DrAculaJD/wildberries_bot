@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="main.DataFromWildberriesTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-06-15T08:35:30" hostname="DESKTOP-NDCU3MU" time="1.744">
+<testsuite name="main.DataFromWildberriesTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-06-22T17:54:53" hostname="DESKTOP-NDCU3MU" time="4.218">
   <properties/>
-  <testcase name="feedbacksTest()" classname="main.DataFromWildberriesTest" time="1.744"/>
-  <system-out><![CDATA[{"data":{"countUnanswered":0,"countArchive":118,"feedbacks":[]},"error":false,"errorText":"","additionalErrors":null}
-
-Отзывов без ответа еще нет ?
+  <testcase name="sendDataForSixMonth()" classname="main.DataFromWildberriesTest" time="4.218"/>
+  <system-out><![CDATA[Request{method=GET, url=https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=2023-01-01&flag=0, headers=[Authorization:??]}
+Нажмите на файл, чтобы скачать его ?
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

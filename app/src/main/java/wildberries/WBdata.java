@@ -4,7 +4,7 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import wildberries.typesOfOperations.TypeOfOperations;
+import wildberries.typeOfOperations.TypeOfOperations;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -35,18 +35,22 @@ public class WBdata {
      * @param apiKey API ключ пользователя
      * @param typeOfOperations тип объекта, с которым работает метод
      * @param typeOfApi тип API ключа, который требуется добавить в БД
+     * @param perMonths Параметр который определяет является ли это запрос получением данных за длительный период
      * @return данные в формате JSON
      * @see wildberries.TypeOfApi
-     * @see wildberries.typesOfOperations.TypeOfOperations
+     * @see wildberries.typeOfOperations.TypeOfOperations
      */
-    public static String getDataForTheDay(String apiKey, TypeOfOperations typeOfOperations, TypeOfApi typeOfApi) {
+    public static String getData(String apiKey,
+                                 TypeOfOperations typeOfOperations,
+                                 TypeOfApi typeOfApi,
+                                 boolean perMonths) {
         String result;
 
         try {
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-                    .url(getUrl(typeOfOperations, typeOfApi))
+                    .url(getUrl(typeOfOperations, typeOfApi, perMonths))
                     .addHeader("Authorization", "Bearer " + apiKey)
                     .build();
             //System.out.println(request);
@@ -64,11 +68,12 @@ public class WBdata {
      * Формирует URL для запроса на сервер Wildberries. Параметры запроса зависят от переданных в метод аргументов.
      * @param typeOfOperations тип объекта, с которым работает метод
      * @param typeOfApi тип API ключа, который требуется добавить в БД
+     * @param perMonths Параметр который определяет является ли это запрос получением данных за длительный период
      * @return URL запроса на сервер Wildberries
      * @see wildberries.TypeOfApi
-     * @see wildberries.typesOfOperations.TypeOfOperations
+     * @see wildberries.typeOfOperations.TypeOfOperations
      */
-    private static String getUrl(TypeOfOperations typeOfOperations, TypeOfApi typeOfApi) {
+    private static String getUrl(TypeOfOperations typeOfOperations, TypeOfApi typeOfApi, boolean perMonths) {
         String request = getRequest(typeOfOperations, typeOfApi);
 
         HttpUrl.Builder urlBuilder =
@@ -81,8 +86,12 @@ public class WBdata {
             return urlBuilder.build().toString();
         }
 
-        urlBuilder.addQueryParameter("dateFrom", getDate());
-        urlBuilder.addQueryParameter("flag", "1");
+        urlBuilder.addQueryParameter("dateFrom", getDate(perMonths));
+        if (perMonths) {
+            urlBuilder.addQueryParameter("flag", "0");
+        } else {
+            urlBuilder.addQueryParameter("flag", "1");
+        }
 
         return urlBuilder.build().toString();
     }
@@ -115,7 +124,7 @@ public class WBdata {
      * QUESTIONS_REQUEST<br>
      * FEEDBACKS_REQUEST
      * @see wildberries.TypeOfApi
-     * @see wildberries.typesOfOperations.TypeOfOperations
+     * @see wildberries.typeOfOperations.TypeOfOperations
      * @see WBdata#SALES_REQUEST
      * @see WBdata#ORDERS_REQUEST
      * @see WBdata#QUESTIONS_REQUEST
@@ -139,12 +148,18 @@ public class WBdata {
     }
 
     /**
-     * Метод для получения текущей даты по Московскому часовому поясу в формате "yyyy-MM-dd",
+     * Метод для получения даты по Московскому часовому поясу в формате "yyyy-MM-dd",
      * который требутся для запроса сгласно API Wildberries. Так как сервер может находиться
      * не в Московском часовом поясе необходимо его указать.
-     * @return Текущую дату по Московскому часовому поясу в формате "yyyy-MM-dd"
+     * @param perMonth Параметр который определяет является ли это запрос получением данных за длительный период.
+     * @return Если необходимо получить данные с начала года, тогда метод вернет "2023-01-01".<br>
+     * В ином случае метод вернет текущую дату по Московскому часовому поясу в формате "yyyy-MM-dd"
      */
-    private static String getDate() {
+    private static String getDate(boolean perMonth) {
+
+        if (perMonth) {
+            return "2023-01-01";
+        }
         final ZoneId moscowZone = ZoneId.of("Europe/Moscow");
         final ZonedDateTime currentDate = ZonedDateTime.now(moscowZone);
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

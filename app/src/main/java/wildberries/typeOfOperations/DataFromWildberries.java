@@ -1,4 +1,4 @@
-package wildberries.typesOfOperations;
+package wildberries.typeOfOperations;
 
 /**
  * Интерфейс создан для представления классов, в которые будут парситься данные, получаемые с сервера Wildberries.
