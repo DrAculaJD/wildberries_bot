@@ -48,7 +48,7 @@ public class Feedback implements DataFromWildberries {
             result.append(feedback.getCreatedDate());
             result.append(feedback.getProductDetails().toString());
             result.append(feedback.getProductValuation());
-            result.append(feedback.getText());
+            result.append(feedback.getText()).append("\n");
             // ID первого из отзывов без ответа добавляется в Map OneObject#firstObject,
             // чтобы на него можно было отправить ответ
             setFirstObjectId(chatId, feedback.getId(), counter++, TypeOfOperations.FEEDBACKS);

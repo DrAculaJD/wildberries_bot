@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="main.DataFromWildberriesTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-06-22T17:54:53" hostname="DESKTOP-NDCU3MU" time="4.218">
+<testsuite name="main.DataFromWildberriesTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-06-23T16:46:35" hostname="DESKTOP-NDCU3MU" time="2.969">
   <properties/>
-  <testcase name="sendDataForSixMonth()" classname="main.DataFromWildberriesTest" time="4.218"/>
-  <system-out><![CDATA[Request{method=GET, url=https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=2023-01-01&flag=0, headers=[Authorization:??]}
-Нажмите на файл, чтобы скачать его ?
+  <testcase name="salesTest()" classname="main.DataFromWildberriesTest" time="2.969"/>
+  <system-out><![CDATA[[{"date":"2023-06-23T18:55:59","lastChangeDate":"2023-06-23T18:59:55","supplierArticle":"0020001","techSize":"0","barcode":"2036730625433","totalPrice":1946,"discountPercent":0,"isSupply":false,"isRealization":true,"promoCodeDiscount":0,"warehouseName":"Краснодар","countryName":"Россия","oblastOkrugName":"Центральный федеральный округ","regionName":"Московская область","incomeID":12633109,"saleID":"S5674552188","odid":9003196951973,"spp":0,"forPay":1137.6,"finishedPrice":1113,"priceWithDisc":1264,"nmId":94883206,"subject":"Блоки питания для ноутбуков","category":"Ноутбуки и компьютеры","brand":"Acer","IsStorno":0,"gNumber":"3352619604621479387","sticker":"","srid":"25157415578581014.0.0"}]
+Продажа №1
+Дата продажи: 2023-06-23 18:55:59
+Тип товара: Блоки питания для ноутбуков
+Бренд товара: Acer
+Артикул продавца: 0020001
+К перечислению поставщику: 1137.0
+Возврат: нет ?
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

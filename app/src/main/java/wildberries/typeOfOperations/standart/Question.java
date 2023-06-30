@@ -48,7 +48,7 @@ public class Question implements DataFromWildberries {
             result.append("❓ Вопрос №").append(counter).append("\n");
             result.append(question.getCreatedDate());
             result.append(question.getProductDetails().toString());
-            result.append(question.getText());
+            result.append(question.getText()).append("\n");
             // ID первого из вопросов без ответа добавляется в Map OneObject#firstObject,
             // чтобы на него можно было отправить ответ
             setFirstObjectId(chatId, question.getId(), counter++, TypeOfOperations.QUESTIONS);
