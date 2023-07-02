@@ -9,6 +9,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import wildberries.Parsing;
 import wildberries.TypeOfApi;
 import wildberries.WBdata;
@@ -18,7 +20,9 @@ import wildberries.typeOfOperations.standart.answers.FeedbacksAnswer;
 import wildberries.typeOfOperations.standart.answers.QuestionsAnswer;
 import wildberries.typeOfOperations.standart.objectStructure.OneObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -76,6 +80,8 @@ public class Answers {
             // id чата пользователя добавляется в список answerers, чтобы определить
             // следующее сообщение от этого пользователя как ответ на вопрос/отзыв
             answerers.put(chatId, typeOfOperations);
+            // к сообщению прикрепляется кнопка, которая отменит отправку ответа, если это необходимо пользователю
+            outputMessage.setReplyMarkup(getCancelButton());
         }
 
         outputMessage.setChatId(chatId);
@@ -92,7 +98,13 @@ public class Answers {
      */
     public static SendMessage sendAnswer(String chatId, String answersMessage) throws JsonProcessingException {
         final String apiKey = userSQL.getApi(chatId, TypeOfApi.STANDART_API);
-        final SendMessage outputMessage = new SendMessage();
+        SendMessage outputMessage = new SendMessage();
+
+        if (answersMessage.equals("Отменить ввод")) {
+            outputMessage = cancelSendingReply(chatId);
+
+            return outputMessage;
+        }
         outputMessage.setChatId(chatId);
 
         // на что именно будет формиироваться ответ зависит от переменной типа TypeOfOperations,
@@ -189,5 +201,40 @@ public class Answers {
         }
 
         return NAME_OF_FEEDBACKS;
+    }
+
+    /**
+     * Метод формирует сообщение о том, что следующее сообщение пользователя не будет определено ботом
+     * как ответ на отзыв/вопрос.
+     * @param chatId ID Telegram чата пользователя
+     * @return объект <b>SendMessage</b> в котором хранится сообщение
+     */
+    public static SendMessage cancelSendingReply(String chatId) {
+        // запись конкретного пользователя удаляется из списка answerers, что далее не позволит программе определить
+        // следующее сообщение в его чате как ответ на отзыв/вопрос
+        answerers.remove(chatId);
+        SendMessage outputMessage = new SendMessage();
+        outputMessage.setChatId(chatId);
+        outputMessage.setText("Ответ не будет отправлен ❌");
+
+        return outputMessage;
+    }
+
+    /**
+     * Метод создает кнопку для пользователя, при нажатии на которую следующее сообщение пользователя
+     * не будет определено ботом как ответ на отзыв/вопрос.
+     * @return объект <b>ReplyKeyboardMarkup</b> в котором хранится кнопка
+     */
+    private static ReplyKeyboardMarkup getCancelButton() {
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+        keyboardMarkup.setResizeKeyboard(true);
+        keyboardMarkup.setOneTimeKeyboard(true);
+        List<KeyboardRow> keyboardRows = new ArrayList<>();
+        KeyboardRow row = new KeyboardRow();
+        row.add("Отменить ввод");
+        keyboardRows.add(row);
+        keyboardMarkup.setKeyboard(keyboardRows);
+
+        return keyboardMarkup;
     }
 }
