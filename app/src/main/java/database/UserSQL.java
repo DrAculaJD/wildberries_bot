@@ -1,6 +1,9 @@
 package database;
 
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import telegram.Data;
 import wildberries.TypeOfApi;
+import wildberries.typeOfOperations.TypeOfOperations;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,7 +12,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Класс для взаимодействия с базой данных PostrgeSQL, конкретно служит для выполнения следующих действий:<br>
@@ -19,16 +24,21 @@ import java.util.Map;
  */
 
 public class UserSQL {
-    private final String username;
-    private final String password;
-    private final String pathToDatabase;
+    /** Имя учетной записи, которой принадлежит БД, с которой работает бот. */
+    private static String username;
+    /** Пароль к учетной записи с которой работает бот. */
+    private static String password;
+    /** Путь к локальной БД. */
+    private static String pathToDatabase;
+    /** Список хранит ID чаты пользователей, которые выбрали команду "Удалить данные". */
+    public static Set<String> theyWantToDeleteData = new HashSet<>();
     private static final String STATISTICS_KEY = "statisticsApi";
     private static final String STANDART_KEY = "standartApi";
 
     public UserSQL(String username, String password, String pathToDatabase) {
-        this.username = username;
-        this.password = password;
-        this.pathToDatabase = pathToDatabase;
+        UserSQL.username = username;
+        UserSQL.password = password;
+        UserSQL.pathToDatabase = pathToDatabase;
     }
 
     /**
@@ -94,8 +104,7 @@ public class UserSQL {
      * @param typeOfApi тип API ключа, который требуется добавить в БД
      * @return Возвращает значение API ключа, тип переменной <b>String</b>
      */
-
-    public String getApi(String chatId, TypeOfApi typeOfApi) {
+    public static String getApi(String chatId, TypeOfApi typeOfApi) {
         String result = "";
 
         for (Map.Entry<String, Map<String, String>> map: getFromDatabase(chatId).entrySet()) {
@@ -145,7 +154,7 @@ public class UserSQL {
      * key - тип ключа <br>
      * value - значение ключа
      */
-    private Map<String, Map<String, String>> getFromDatabase(String chatId) {
+    private static Map<String, Map<String, String>> getFromDatabase(String chatId) {
         Map<String, String> apiKeys = new HashMap<>();
         Map<String, Map<String, String>> result = new HashMap<>();
 
@@ -174,6 +183,65 @@ public class UserSQL {
         }
         // возвращаются данные пользователя
         return result;
+    }
+
+    public static SendMessage deleteUser(String chatId) throws SQLException {
+        final String request = "DELETE FROM users WHERE chat_id = ?";
+        final SendMessage outputMessage = new SendMessage();
+        outputMessage.setChatId(chatId);
+
+        try (Connection connection = DriverManager.getConnection(pathToDatabase, username, password)) {
+            try (PreparedStatement statement = connection.prepareStatement(request)) {
+
+                statement.setLong(1, Integer.parseInt(chatId));
+
+                int rowsDeleted = statement.executeUpdate();
+
+                if (rowsDeleted > 0) {
+                    theyWantToDeleteData.remove(chatId);
+                    outputMessage.setText("""
+                            Ваши данные успешно удалены!
+                            Команды бота больше не будут работать.
+
+                            Благодарим вас за пользование ботом!""");
+                }
+            } catch (SQLException ex) {
+                outputMessage.setText("Удаление завершено с ошибкой, "
+                        + "пожалуйста, оставьте заявку на удаление данных в этом чате: https://t.me/wbotfeedback");
+            }
+        }
+
+        return outputMessage;
+    }
+
+    public static SendMessage areYouSureMessage(String chatId) {
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+
+        try {
+            Data.getTodayData(chatId, TypeOfOperations.ORDER, TypeOfApi.STATISTICS_API);
+            final String yesOrNoMessage = """
+                Если вы действительно желаете удалить ваши данные из этого бота, введите в ответ "Да"
+                Если вы решили не удалаять данные, тогда введите "Нет\"""";
+
+            theyWantToDeleteData.add(chatId);
+            message.setText(yesOrNoMessage);
+        } catch (Exception e) {
+            message.setText("""
+                    Ваших данных нет в базе данных бота.\s
+                    Для начала работы перезапустите бот или выберите команду "Обновить ключи\"""");
+        }
+
+        return message;
+    }
+
+    public static SendMessage undoDataDeletion(String chatId) {
+        theyWantToDeleteData.remove(chatId);
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText("Ваши данные не удалены из бота.");
+
+        return message;
     }
 
 }

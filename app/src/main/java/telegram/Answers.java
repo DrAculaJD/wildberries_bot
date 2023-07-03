@@ -100,6 +100,9 @@ public class Answers {
         final String apiKey = userSQL.getApi(chatId, TypeOfApi.STANDART_API);
         SendMessage outputMessage = new SendMessage();
 
+        // если пользователь нажал на кнопку "Отменить ввод", тогда запись его чата удаляется из списка answerers
+        // и пользователю отправляется сообщение о том, что его следующее сообщение не будет отправлено
+        // как ответ на отзыв или вопрос
         if (answersMessage.equals("Отменить ввод")) {
             outputMessage = cancelSendingReply(chatId);
 

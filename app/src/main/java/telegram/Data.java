@@ -196,4 +196,13 @@ public class Data {
         return true;
 
     }
+
+
+    public static SendMessage getWaitMessage(String chatId) {
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText("⏳");
+
+        return message;
+    }
 }

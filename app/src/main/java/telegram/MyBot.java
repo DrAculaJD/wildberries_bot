@@ -1,5 +1,6 @@
 package telegram;
 
+import database.UserSQL;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -8,6 +9,10 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import wildberries.TypeOfApi;
 import wildberries.typeOfOperations.TypeOfOperations;
+
+import java.sql.SQLException;
+
+import static telegram.Data.getWaitMessage;
 
 /**
  * Класс содержит логику взаимодествия бота с программой.
@@ -56,6 +61,8 @@ public class MyBot extends TelegramLongPollingBot {
         // отправка ответа на вопрос/отзыв, если клиент ранее выбрал соответсвующую команду
         if (Answers.answerers.containsKey(chatId)) {
             sendMessage(Answers.sendAnswer(chatId, inputMessage));
+        } else if (UserSQL.theyWantToDeleteData.contains(chatId)) {
+            sendMessage(deleteUser(chatId, inputMessage));
         }
 
         if ("/orders".equals(inputMessage)) {
@@ -77,11 +84,15 @@ public class MyBot extends TelegramLongPollingBot {
             // отправка сообщения с предложением ввести ответ на первый вопрос
             sendMessage(Answers.getFirstMessage(chatId, TypeOfOperations.QUESTIONS, TypeOfApi.STANDART_API));
         } else if ("/more_orders".equals(inputMessage)) {
+            sendMessage(getWaitMessage(chatId));
             sendDocument(Data.getDataForSeveralMonths(chatId, TypeOfOperations.ORDER));
             sendMessage(Data.deleteExcel(chatId, TypeOfOperations.ORDER));
         } else if ("/more_sales".equals(inputMessage)) {
+            sendMessage(getWaitMessage(chatId));
             sendDocument(Data.getDataForSeveralMonths(chatId, TypeOfOperations.SALE));
             sendMessage(Data.deleteExcel(chatId, TypeOfOperations.SALE));
+        } else if ("/delete_user".equals(inputMessage)) {
+            sendMessage(UserSQL.areYouSureMessage(chatId));
         }
 
     }
@@ -182,6 +193,23 @@ public class MyBot extends TelegramLongPollingBot {
 
         message.setChatId(update.getMessage().getChatId());
         message.setText("Теперь, пожалуйста, введите ваш ключ API \"Стандартный\"");
+
+        return message;
+    }
+
+    private SendMessage deleteUser(String chatId, String inputMessage) throws SQLException {
+
+        final String formatMessage = inputMessage.trim().toLowerCase();
+
+        if (formatMessage.equals("да")) {
+            return UserSQL.deleteUser(chatId);
+        } else if (formatMessage.equals("нет")) {
+            return UserSQL.undoDataDeletion(chatId);
+        }
+
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText("Команда не распознана, пожалуйста, введите \"Да\" или \"Нет\"");
 
         return message;
     }
