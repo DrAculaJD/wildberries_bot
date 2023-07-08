@@ -185,6 +185,12 @@ public class UserSQL {
         return result;
     }
 
+    /**
+     * Отправляет запрос в БД на удаление данных по ID чата пользователя.
+     * Удаляет ID чата пользователя из списка <b>theyWantToDeleteData</b>.
+     * @param chatId ID Telegram чата пользователя
+     * @return объект <b>SendMessage</b>, который хранит сообщение об успешном/неуспешном удалении данных пользователя.
+     */
     public static SendMessage deleteUser(String chatId) throws SQLException {
         final String request = "DELETE FROM users WHERE chat_id = ?";
         final SendMessage outputMessage = new SendMessage();
@@ -198,7 +204,6 @@ public class UserSQL {
                 int rowsDeleted = statement.executeUpdate();
 
                 if (rowsDeleted > 0) {
-                    theyWantToDeleteData.remove(chatId);
                     outputMessage.setText("""
                             Ваши данные успешно удалены!
                             Команды бота больше не будут работать.
@@ -209,11 +214,20 @@ public class UserSQL {
                 outputMessage.setText("Удаление завершено с ошибкой, "
                         + "пожалуйста, оставьте заявку на удаление данных в этом чате: https://t.me/wbotfeedback");
             }
+
+            theyWantToDeleteData.remove(chatId);
         }
 
         return outputMessage;
     }
 
+    /**
+     * Формирует сообщение, в котором пользователю предлагается подтвердить удаление данных.
+     * Добавляет ID чата с пользователем в список <b>theyWantToDeleteData</b>.
+     * @param chatId ID Telegram чата пользователя
+     * @return объект <b>SendMessage</b>, который хранит сообщение в котором пользователю
+     * предлагается подтвердить удаление данных.
+     */
     public static SendMessage areYouSureMessage(String chatId) {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
@@ -235,6 +249,11 @@ public class UserSQL {
         return message;
     }
 
+    /**
+     * Удаляет ID чата пользователя из списка <b>theyWantToDeleteData</b>.
+     * @param chatId ID Telegram чата пользователя
+     * @return объект <b>SendMessage</b>, который хранит сообщение "Ваши данные не удалены из бота."
+     */
     public static SendMessage undoDataDeletion(String chatId) {
         theyWantToDeleteData.remove(chatId);
         SendMessage message = new SendMessage();

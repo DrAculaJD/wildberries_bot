@@ -197,6 +197,13 @@ public class MyBot extends TelegramLongPollingBot {
         return message;
     }
 
+    /**
+     * Метод проверяет какой ответ отправил пользователь для подтверждения удаления данных.
+     * В зависимости от этого ответа формурует новое сообщение для пользователя.
+     * @param inputMessage текст сообщения пользователя
+     * @param chatId ID Telegram чата пользователя
+     * @return объект <b>SendMessage</b>, который хранит сообщение об успешном/неуспешном удалении данных пользователя.
+     */
     private SendMessage deleteUser(String chatId, String inputMessage) throws SQLException {
 
         final String formatMessage = inputMessage.trim().toLowerCase();
