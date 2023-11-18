@@ -108,7 +108,7 @@ public class MyBot extends TelegramLongPollingBot {
 
         // длина API ключа, используется для его идентификации,
         // так как совпадения иного сообщения по количеству символов маловероятно
-        final int apiLength = 149;
+        final int apiLength = 381;
 
         if (inputMessage.equals("/start")) {
             startAction(update);
@@ -192,7 +192,7 @@ public class MyBot extends TelegramLongPollingBot {
         SendMessage message = new SendMessage();
 
         message.setChatId(update.getMessage().getChatId());
-        message.setText("Теперь, пожалуйста, введите ваш ключ API \"Стандартный\"");
+        message.setText("Теперь, пожалуйста, введите ваш ключ API \"Вопросы и отзывы\"");
 
         return message;
     }
