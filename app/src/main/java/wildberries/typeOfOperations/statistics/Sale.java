@@ -73,7 +73,7 @@ public class Sale implements DataFromWildberries {
                 + "Бренд товара: " + brand + '\n'
                 + "Артикул продавца: " + supplierArticle + '\n'
                 + "К перечислению поставщику: " + amount + '\n'
-                + "Тип заказа: " + orderType + '\n';
+                + "Тип заказа: " + Order.getOrderType(orderType) + '\n';
     }
 
 }
