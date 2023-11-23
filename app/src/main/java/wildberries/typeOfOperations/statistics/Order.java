@@ -21,10 +21,9 @@ public class Order implements DataFromWildberries {
     private String warehouseName;
     private String regionName;
     private String brand;
+    private String orderType;
     private String barcode;
     private int nmId;
-    @JsonProperty("isCancel")
-    private boolean isCancel;
 
     public void setBarcode(String barcode) {
         this.barcode = barcode;
@@ -57,9 +56,6 @@ public class Order implements DataFromWildberries {
         this.brand = brand;
     }
 
-    public void setCancel(boolean cancel) {
-        isCancel = cancel;
-    }
 
     /**
      * В этом классе в таком методе нет необходимости, поэтому он существует только потому,
@@ -86,10 +82,6 @@ public class Order implements DataFromWildberries {
         bd = bd.setScale(2, RoundingMode.HALF_UP);
         priceWithDiscount = bd.doubleValue();
 
-        if (isCancel) {
-            cancel = "да ❌";
-        }
-
         return "Дата заказа: " + date.substring(0, 10) + " " + date.substring(11) + '\n'
                 + "Бренд: " + brand + '\n'
                 + "Тип товара: " + subject + '\n'
@@ -97,6 +89,6 @@ public class Order implements DataFromWildberries {
                 + "Стоимость: " + priceWithDiscount + " руб." + '\n'
                 + "Склад продажи: " + warehouseName + '\n'
                 + "Куда заказан: " + regionName + '\n'
-                + "Отменен: " + cancel;
+                + "Тип заказа: " + orderType + '\n';
     }
 }
