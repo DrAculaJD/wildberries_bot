@@ -19,7 +19,7 @@ public class Order implements DataFromWildberries {
     private String subject;
     private int discountPercent;
     private String warehouseName;
-    private String oblast;
+    private String regionName;
     private String brand;
     private String barcode;
     private int nmId;
@@ -50,8 +50,8 @@ public class Order implements DataFromWildberries {
     public void setWarehouseName(String warehouseName) {
         this.warehouseName = warehouseName;
     }
-    public void setOblast(String oblast) {
-        this.oblast = oblast;
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
     }
     public void setBrand(String brand) {
         this.brand = brand;
@@ -96,7 +96,7 @@ public class Order implements DataFromWildberries {
                 + "Артикул продавца: " + supplierArticle + '\n'
                 + "Стоимость: " + priceWithDiscount + " руб." + '\n'
                 + "Склад продажи: " + warehouseName + '\n'
-                + "Куда заказан: " + oblast + '\n'
+                + "Куда заказан: " + regionName + '\n'
                 + "Отменен: " + cancel;
     }
 }
