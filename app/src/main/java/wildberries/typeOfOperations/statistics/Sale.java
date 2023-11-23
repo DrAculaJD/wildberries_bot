@@ -14,7 +14,7 @@ import java.math.RoundingMode;
 public class Sale implements DataFromWildberries {
     private String supplierArticle;
     private String date;
-    private String saleID;
+    private String orderType;
     private String subject;
     private int forPay;
     private String brand;
@@ -42,8 +42,8 @@ public class Sale implements DataFromWildberries {
     public void setBrand(String brand) {
         this.brand = brand;
     }
-    public void setSaleID(String saleID) {
-        this.saleID = saleID;
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
     }
 
     /**
@@ -62,13 +62,6 @@ public class Sale implements DataFromWildberries {
     @Override
     public String toString() {
 
-        // переменная хранит данные о том был ли возврат товара и далее меняет свое значение
-        // в зависимости от значения переменной saleID
-        String cancel = "нет \uD83D\uDC4D\n";
-        if (saleID.contains("R")) {
-            cancel = "да ❌";
-        }
-
         // расчет и округление суммы, которую поставщик получит за продажу
         double amount = forPay;
         BigDecimal bd = new BigDecimal(amount);
@@ -80,7 +73,7 @@ public class Sale implements DataFromWildberries {
                 + "Бренд товара: " + brand + '\n'
                 + "Артикул продавца: " + supplierArticle + '\n'
                 + "К перечислению поставщику: " + amount + '\n'
-                + "Возврат: " + cancel;
+                + "Тип заказа: " + orderType;
     }
 
 }

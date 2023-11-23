@@ -72,9 +72,6 @@ public class Order implements DataFromWildberries {
      */
     @Override
     public String toString() {
-        // переменная хранит данные о том был ли отменен заказ и далее меняет свое значение
-        // в зависимости от значения переменной isCancel
-        String cancel = "нет \uD83D\uDC4D\n";
 
         // расчет и округление суммы, которую поставщик получит за заказ
         double priceWithDiscount = totalPrice * (1 - (double) discountPercent / 100);
