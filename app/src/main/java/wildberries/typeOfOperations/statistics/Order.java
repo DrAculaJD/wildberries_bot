@@ -25,6 +25,9 @@ public class Order implements DataFromWildberries {
     private String barcode;
     private int nmId;
 
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
+    }
     public void setBarcode(String barcode) {
         this.barcode = barcode;
     }
