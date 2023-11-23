@@ -105,6 +105,6 @@ public class Order implements DataFromWildberries {
             return clientOrder + " 📦";
         }
 
-        return clientOrder + " 🔙";
+        return type + " \uD83D\uDD03";
     }
 }
