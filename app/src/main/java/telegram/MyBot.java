@@ -106,10 +106,8 @@ public class MyBot extends TelegramLongPollingBot {
         final String inputMessage = update.getMessage().getText().trim();
         final String chatId = update.getMessage().getChatId().toString();
 
-        // длина API ключа, используется для его идентификации,
-        // так как совпадения иного сообщения по количеству символов маловероятно
-        //final int longApiLength = 381;
-        //final int shortApiLength = 372;
+        // в качестве проверки соотвествия сообщения API ключу используются первые 4 символа сообщения
+        // в ключах Вайлдберриз всегда в начале символы eyjh
         final String checkTokenMessage = "eyjh";
         final String firstSymFromInput = inputMessage.substring(0,4).trim().toLowerCase();
 
