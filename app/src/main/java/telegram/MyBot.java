@@ -108,12 +108,14 @@ public class MyBot extends TelegramLongPollingBot {
 
         // длина API ключа, используется для его идентификации,
         // так как совпадения иного сообщения по количеству символов маловероятно
-        final int longApiLength = 381;
-        final int shortApiLength = 372;
+        //final int longApiLength = 381;
+        //final int shortApiLength = 372;
+        final String checkTokenMessage = "eyjh";
+        final String firstSymFromInput = inputMessage.substring(0,4).trim().toLowerCase();
 
         if (inputMessage.equals("/start")) {
             startAction(update);
-        } else if (inputMessage.length() == longApiLength || inputMessage.length() == shortApiLength) {
+        } else if (firstSymFromInput.equals(checkTokenMessage)) {
             if (Data.isStatisticsKey(chatId, inputMessage, TypeOfOperations.SALE)) {
 
                 sendMessage(Data.setApiKey(update, TypeOfApi.STATISTICS_API));
