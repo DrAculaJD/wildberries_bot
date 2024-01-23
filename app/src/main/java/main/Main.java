@@ -8,8 +8,6 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 public class Main {
 
-    public static UserSQL userSQL;
-
     /**
      * Основной класс, создает объект класса UserSQL для работы с базой данных, и создает подключение к Telegram боту.
      * @param args принимает 5 значений в качестве аргументов при запуске программы:<br>
@@ -40,5 +38,7 @@ public class Main {
             throw new RuntimeException(e);
         }
     }
+
+    public static UserSQL userSQL;
 
 }
